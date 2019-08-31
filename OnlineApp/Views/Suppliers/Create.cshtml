@@ -1,0 +1,142 @@
+﻿@model OnlineApp.Models.FrdSupplier
+
+@using (Html.BeginForm("Create", "Suppliers", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="container" style="margin-top:5%">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading ">
+                        <div class="clearfix ">
+                            Create Supplier
+                        </div>
+                    </div>
+                    <table class="table table-bordered table-hover">
+                        <tr>
+
+
+                            <td style="color:black">
+                                Supplier ID
+                            </td>
+                            <td>@Html.EditorFor(model => model.SupplierID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</td>
+
+                        </tr>
+                        <tr>
+
+
+                            <td style="color:black">
+                                Supplier Code
+                            </td>
+                            <td>@Html.EditorFor(model => model.SupplierCode, new { htmlAttributes = new { @class = "form-control" } })</td>
+
+                        </tr>
+                        <tr>
+
+
+                            <td style="color:black">
+                                Supplier Name
+                            </td>
+                            <td>@Html.EditorFor(model => model.SupplierName, new { htmlAttributes = new { @class = "form-control" } })</td>
+
+                        </tr>
+                        <tr>
+
+
+                            <td style="color:black">
+                                Supplier Address
+                            </td>
+                            <td>@Html.EditorFor(model => model.SupplierAddress, new { htmlAttributes = new { @class = "form-control" } })</td>
+
+                        </tr>
+                        <tr>
+
+
+                            <td style="color:black">
+                                Phone Number
+                            </td>
+                            <td>@Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })</td>
+
+                        </tr>
+                        <tr>
+
+                            <td style="color:black">
+                                Mobile Number
+                            </td>
+                            <td>@Html.EditorFor(model => model.MobileNumber, new { htmlAttributes = new { @class = "form-control" } })</td>
+                        </tr>
+
+
+
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading ">
+                        <div class="clearfix ">
+                            &
+                        </div>
+                    </div>
+                    <table class="table table-bordered table-hover">
+
+                        <tr>
+
+
+                            <td style="color:black">
+                                Email Address
+                            </td>
+                            <td>@Html.EditorFor(model => model.EmailAddress, new { htmlAttributes = new { @class = "form-control" } })</td>
+
+                        </tr>
+                        <tr>
+
+
+                            <td style="color:black">
+                                Zone Code
+                            </td>
+                            <td>@Html.EditorFor(model => model.ZoneCode, new { htmlAttributes = new { @class = "form-control" } })</td>
+
+                        </tr>
+                        <tr>
+
+
+                            <td style="color:black">
+                                Branch Code
+                            </td>
+                            <td>@Html.EditorFor(model => model.BranchCode, new { htmlAttributes = new { @class = "form-control" } })</td>
+
+                        </tr>
+                        <tr>
+
+
+                            <td style="color:black">
+                                Remarks
+                            </td>
+                            <td>@Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control" } })</td>
+
+                        </tr>
+
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>
+                                <input type="submit" value="Add Items" class="btn btn-info" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+
+
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
