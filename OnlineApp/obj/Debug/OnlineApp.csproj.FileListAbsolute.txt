@@ -609,7 +609,6 @@ D:\ES_Last\OnlineApp\OnlineApp\obj\Debug\RdlCompile.cache
 D:\ES_Last\OnlineApp\OnlineApp\obj\Debug\RdlCompile.compiled
 D:\ES_Last\OnlineApp\OnlineApp\obj\Debug\OnlineApp.dll
 D:\ES_Last\OnlineApp\OnlineApp\obj\Debug\OnlineApp.pdb
-E:\ES_Test\OnlineApp\OnlineApp\obj\Debug\OnlineApp.csprojResolveAssemblyReference.cache
 E:\ES_Test\OnlineApp\OnlineApp\obj\Debug\RdlCompile.cache
 E:\ES_Test\OnlineApp\OnlineApp\obj\Debug\RdlCompile.compiled
 E:\ES_Test\OnlineApp\OnlineApp\obj\Debug\OnlineApp.dll
@@ -786,3 +785,4 @@ E:\ES_Test\OnlineApp\OnlineApp\bin\pt\Microsoft.ReportViewer.WinForms.resources.
 E:\ES_Test\OnlineApp\OnlineApp\bin\ru\Microsoft.ReportViewer.WinForms.resources.dll
 E:\ES_Test\OnlineApp\OnlineApp\bin\zh-CHS\Microsoft.ReportViewer.WinForms.resources.dll
 E:\ES_Test\OnlineApp\OnlineApp\bin\zh-CHT\Microsoft.ReportViewer.WinForms.resources.dll
+E:\ES_Test\OnlineApp\OnlineApp\obj\Debug\OnlineApp.csprojResolveAssemblyReference.cache

@@ -530,6 +530,7 @@
     <Content Include="qualityassure.xsc">
       <DependentUpon>qualityassure.xsd</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\OnlineEss.pubxml" />
     <None Include="qualityassure.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
