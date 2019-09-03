@@ -708,8 +708,8 @@ Fax : (+880-2) 9884644
         <DataSetName>requisitionslip</DataSetName>
         <Top>2.60292in</Top>
         <Left>0.21315in</Left>
-        <Height>1.07292in</Height>
-        <Width>6.15359in</Width>
+        <Height>1.07291in</Height>
+        <Width>6.15358in</Width>
         <ZIndex>4</ZIndex>
         <Style>
           <Border>
@@ -969,7 +969,7 @@ Fax : (+880-2) 9884644
       </Border>
     </Style>
   </Body>
-  <Width>6.36673in</Width>
+  <Width>6.36674in</Width>
   <Page>
     <LeftMargin>1in</LeftMargin>
     <RightMargin>1in</RightMargin>

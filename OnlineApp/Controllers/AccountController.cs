@@ -79,7 +79,7 @@ namespace OnlineApp.Controllers
                                     RoleId = x.RoleId,
                                     UserID = x.UserID
                                 }).FirstOrDefault();
-                                List<MenuData> menus = dc.sUserPages.Where(x => x.RoleID == loginCredentials.RoleId && x.UserID == loginCredentials.UserID).Select(x => new MenuData
+                                List<MenuData> menus = dc.sUserPages.Where(x => x.RoleID == loginCredentials.RoleId && x.UserID == loginCredentials.UserID && x.Status =="ACT").Select(x => new MenuData
                                 {
                                     MenuID = x.sMenu.MenuID,
                                     MenuName = x.sMenu.MenuName,

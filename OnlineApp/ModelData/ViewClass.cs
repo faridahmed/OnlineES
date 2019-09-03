@@ -175,4 +175,35 @@ namespace OnlineApp.ModelData
         public List<FrdItemTranInfo> itemdtl { get; set; }
 
     }
+    public class ProductVM
+    {
+        public int ItemNo { get; set; }
+        public int ItemCode { get; set; }
+        public string ItemName { get; set; }
+        public string ItemDescription { get; set; }
+        public Nullable<int> ItemType { get; set; }
+        public Nullable<int> ItemTypeCode { get; set; }
+        public Nullable<int> ItemUnitCode { get; set; }
+        public int PlantCode { get; set; }
+        public Nullable<int> ItemMachineCode { get; set; }
+        public Nullable<decimal> UnitPrice { get; set; }
+        //public string TaxFlag { get; set; }
+        //public int ConvertValue { get; set; }
+        //public string UseFor { get; set; }
+        public string Show { get; set; }
+        //public string CreateBy { get; set; }
+        //public Nullable<System.DateTime> CreateDate { get; set; }
+        public Nullable<int> AlmariCode { get; set; }
+        public string AlmariDesc { get; set; }
+        public Nullable<int> RowID { get; set; }
+        public Nullable<int> RacID { get; set; }
+        public Nullable<int> BinID { get; set; }
+        public string ItemSize { get; set; }
+        public Nullable<int> ItemSource { get; set; }
+        public Nullable<int> UnitCode { get; set; }
+        public Nullable<int> TrackID { get; set; }
+        public Nullable<int> ETrack { get; set; }
+        public string Location { get; set; }
+
+    }
 }
