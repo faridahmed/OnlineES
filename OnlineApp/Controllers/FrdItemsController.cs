@@ -19,14 +19,26 @@ namespace OnlineApp.Controllers
         // GET: FrdItems
         public ActionResult Index()
         {
-            var data = db.sPlants.Select(s => new
-            {
-                Text = s.PlantNo + "---" + s.PlantCode + " --- " + s.PlantName,
-                Value = s.PlantNo
-            }).ToList();
-            ViewBag.PlantNo = new SelectList(data, "Value", "Text");
+            var w = (from y in db.sUsers
+                     where y.UserID.ToString() == User.Identity.Name
+                     select new { y.PlantNo }).FirstOrDefault();
+            var wn = db.sPlants.Where(x => x.PlantNo == w.PlantNo).FirstOrDefault();
+            var cust = db.sBenificiaries.Where(x => x.PlantID == wn.PlantNo && x.Status == "Y").Select(x => new { Text = x.BenificiaryName + " , " + x.BenificiaryID, Value = x.BenificiaryID }).OrderBy(e => e.Text).ToList();
+            ViewBag.PlantCode = wn.PlantNo;
+            ViewBag.WarehouseIDLogin = wn.PlantName;
+            ViewBag.ItemType = new SelectList(db.sParams.Where(c => c.StartCode == 400001), "IDCode", "Description");
+            ViewBag.ItemTypeCode = new SelectList(db.sParams.Where(c => c.StartCode == 500001), "IDCode", "Description");
+            ViewBag.ItemUnitCode = new SelectList(db.sUnits, "UnitID", "UnitName");
+            ViewBag.ItemMachineCode = new SelectList(db.FrdMachines, "MachineID", "MachineName");
+            int value = db.FrdItems.Max(a => a.ItemNo);
+            int num = value;
 
-            return View();
+            ItemVM sup = new ItemVM
+            {
+                ItemNo = (num + 1),
+
+            };
+            return View(sup);
         }
         [HttpPost]
         public ActionResult CreateItem(ItemVM item)
@@ -44,10 +56,10 @@ namespace OnlineApp.Controllers
                 nw.PlantCode = item.PlantCode;
                 nw.ItemMachineCode = item.ItemMachineCode;
                 nw.UnitPrice = item.UnitPrice;
-                nw.TaxFlag = item.TaxFlag;
+                nw.TaxFlag = "Y";
                 nw.ConvertValue = item.ConvertValue;
-                nw.UseFor = item.UseFor;
-                nw.Show = item.Show;
+                nw.UseFor = "User recomended";
+                nw.Show = "N";
                 nw.CreateBy = Session["Name"].ToString();
                 nw.CreateDate = DateTime.Now;
                 db.FrdItems.Add(nw);

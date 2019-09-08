@@ -18,6 +18,7 @@
                  @Html.TextBox("DeptID", null, htmlAttributes: new { @class = "form-control", @Value = ViewBag.WarehouseIDLogin, @readonly = "readonly" })
                 @Html.TextBox("DeptName", null, htmlAttributes: new { @class = "form-control", @Value = ViewBag.WarehouseIDLogin, @readonly = "readonly" })
                 @*<select id="ttItemCode" class="form-control" ,style="width:150px"><option>Select One</option></select>*@
+                <input type="hidden" id="PhoneNo"/>
             </div>
         </div>
 
@@ -203,4 +204,39 @@
         document.getElementById("create").disabled = false;
        // $('#OrderQty').focus()
     });
+    function SMSsend() {
+        //To Save New Item
+        var Consms = "Dear Sir, For your kind information need aaproval for purchase." +
+             + " Ref No:" + $('#ReqID').val() + " Regrads Engineering Store";       
+
+        var data = {
+            phoneno: $("#PhoneNo").val(),
+            sms: Consms
+        }
+        console.log(Consms);
+        $.ajax({
+            url: '/OrderRequest/SendSMStoDB',
+            type: "POST",
+            data: JSON.stringify(data),
+            dataType: "JSON",
+            contentType: "application/json",
+            success: function (a) {
+
+                if (a.status == true) {
+
+                    alert('Successfully Send SMS to Manager Sir ...');
+                    // window.location.reload();
+                    $("#driverPhone").val('');
+                    $("#spnote").val('');
+                }
+                else {
+                    alert('Failed');
+                }
+            },
+            error: function () {
+                // alert('SMS not send to Customer..');
+            }
+        });
+
+    };
 </script>

@@ -4,6 +4,7 @@ using OnlineApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -485,6 +486,40 @@ namespace OnlineApp.Controllers
                 return Json(new { status = "error", message = "Error Generate" });
 
             }
+        }
+        public JsonResult SendSMStoDB(string phoneno, string sms)
+        {
+            bool status = false;
+            string mes = "";
+
+            HttpWebRequest request;
+            HttpWebResponse response = null;
+            String url;
+            String host;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    //  var customerphone = db.Customers.Where(x=>x.CustomerID == )
+                    status = true;
+                    host = "https://vas.banglalinkgsm.com/sendSMS/sendSMS?msisdn=" + phoneno + "&message=" + sms + "&userID=" + "tranbevltd" + "&passwd=" + "92b034a909c050209caac7d5ccc0bf64" + "&sender=" + "8801969900240" + "";
+                    url = host;
+                    request = (HttpWebRequest)WebRequest.Create(url);
+                    response = (HttpWebResponse)request.GetResponse();
+                    return new JsonResult { Data = new { status = status, mes = mes } };
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { status = "error", message = "sms Not Send" });
+                    //throw ex;
+                }
+            }
+            else
+            {
+                status = false;
+            }
+            return new JsonResult { Data = new { status = status, mes = mes } };
         }
     }
 }

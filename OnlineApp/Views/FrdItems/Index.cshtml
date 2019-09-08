@@ -15,14 +15,21 @@
                     </div>
                     <table class="table table-bordered table-hover">
                         <tr>
+                            <td>
+                                @Html.TextBox("WarehouseIDLogin", null, htmlAttributes: new { @class = "form-control", @Value = ViewBag.WarehouseIDLogin, @readonly = "readonly" })
+                            </td>
+                            <td>@Html.TextBox("PlantCode", null, htmlAttributes: new { @class = "form-control", @Value = ViewBag.PlantCode, @readonly = "readonly" })</td>
+                        </tr>
+                        <tr>
 
 
                             <td style="color:black">
                                 Item No
                             </td>
-                            <td>@Html.EditorFor(model => model.ItemNo, new { htmlAttributes = new { @class = "form-control" } })</td>
+                            <td>@Html.EditorFor(model => model.ItemNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</td>
 
                         </tr>
+
                         <tr>
 
 
@@ -38,7 +45,7 @@
                             <td style="color:black">
                                 Item Name
                             </td>
-                            <td>@Html.EditorFor(model => model.ItemName, new { htmlAttributes = new { @class = "form-control"} })</td>
+                            <td>@Html.EditorFor(model => model.ItemName, new { htmlAttributes = new { @class = "form-control" } })</td>
 
                         </tr>
                         <tr>
@@ -50,40 +57,18 @@
                             <td>@Html.EditorFor(model => model.ItemDescription, new { htmlAttributes = new { @class = "form-control" } })</td>
 
                         </tr>
-                        <tr>
-
-                            <td style="color:black">
-                                Plant
-                            </td>
-                            <td> @Html.DropDownList("PlantNo", null, "---Select Plant---", new { @class = "form-control PlantNo", id = "PlantNo" })</td>
-                        </tr>
+                       
                         <tr>
 
 
                             <td style="color:black">
                                 ItemType
                             </td>
-                            <td>@Html.EditorFor(model => model.ItemType, new { htmlAttributes = new { @class = "form-control" } })</td>
+                            <td>@Html.DropDownList("ItemType", null, "Select Item Type", new { @class = "form-control" })</td>
 
                         </tr>
-                        <tr>
 
 
-                            <td style="color:black">
-                                Item TypeCode
-                            </td>
-                            <td>@Html.EditorFor(model => model.ItemTypeCode, new { htmlAttributes = new { @class = "form-control" } })</td>
-
-                        </tr>
-                        <tr>
-
-
-                            <td style="color:black">
-                                Item UnitCode
-                            </td>
-                            <td>@Html.EditorFor(model => model.ItemUnitCode, new { htmlAttributes = new { @class = "form-control" } })</td>
-
-                        </tr>
 
 
                     </table>
@@ -97,14 +82,23 @@
                         </div>
                     </div>
                     <table class="table table-bordered table-hover">
-
                         <tr>
 
 
                             <td style="color:black">
-                                Plant Code
+                                Item TypeCode
                             </td>
-                            <td>@Html.EditorFor(model => model.PlantCode, new { htmlAttributes = new { @class = "form-control" } })</td>
+
+                            <td>@Html.DropDownList("ItemTypeCode", null, "Select Item Type Code", new { @class = "form-control" })</td>
+
+                        </tr>
+                        <tr>
+
+
+                            <td style="color:black">
+                                Item Unit Code
+                            </td>
+                            <td>@Html.DropDownList("ItemUnitCode", null, "Select Unit", new { @class = "form-control" })</td>
 
                         </tr>
                         <tr>
@@ -113,7 +107,7 @@
                             <td style="color:black">
                                 Item MachineCode
                             </td>
-                            <td>@Html.EditorFor(model => model.ItemMachineCode, new { htmlAttributes = new { @class = "form-control" } })</td>
+                            <td>@Html.DropDownList("ItemMachineCode", null, "Select Machine", new { @class = "form-control" })</td>
 
                         </tr>
                         <tr>
@@ -125,42 +119,8 @@
                             <td>@Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control" } })</td>
 
                         </tr>
-                        @*<tr>
 
 
-                            <td style="color:black">
-                                Tax Flag
-                            </td>
-                            <td>@Html.EditorFor(model => model.TaxFlag, new { htmlAttributes = new { @class = "form-control" } })</td>
-
-                        </tr>
-                        <tr>
-
-
-                            <td style="color:black">
-                                Convert Value
-                            </td>
-                            <td>@Html.EditorFor(model => model.ConvertValue, new { htmlAttributes = new { @class = "form-control" } })</td>
-
-                        </tr>
-                        <tr>
-
-
-                            <td style="color:black">
-                                Use For
-                            </td>
-                            <td>@Html.EditorFor(model => model.UseFor, new { htmlAttributes = new { @class = "form-control" } })</td>
-
-                        </tr>*@
-                        <tr>
-
-
-                            <td style="color:black">
-                                Active/Inactive
-                            </td>
-                            <td>@Html.EditorFor(model => model.Show, new { htmlAttributes = new { @class = "form-control" } })</td>
-
-                        </tr>
 
                         <tr>
                             <td>&nbsp;</td>
