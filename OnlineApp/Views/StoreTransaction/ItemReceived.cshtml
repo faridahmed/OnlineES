@@ -15,7 +15,7 @@
                 @Html.TextBox("WarehouseIDLogin", null, htmlAttributes: new { @class = "form-control", @Value = ViewBag.WarehouseIDLogin, @readonly = "readonly" })
                 <label style="color:red"> Reference Purchase Token No :</label>
                 @Html.DropDownList("RefInvoice", null, "Select One", new { @class = "form-control" })              
-                <label style="color:red"> Sphere/Non-Sphere :</label>
+                <label style="color:red"> Spare/Non-Spare :</label>
                 @Html.DropDownList("TypeCodes", null, "Select One", new { @class = "form-control" })
                 <label style="color:red"> Foreign/Local :</label>
                 @Html.DropDownList("TypeCode", null, "Select One", new { @class = "form-control" })
@@ -201,13 +201,13 @@
                 //check is successfully save to database
                 if (a.status == true) {
                     //will send status from server side
-                    alert('Successfully Done... Requisition Received Token No:' + a.v);
+                    alert('Successfully Done...  Received Transaction No:' + a.v);
                     window.location.reload();
                     OrderData = [];
 
                 }
                 else {
-                    alert('Requisition Received Process is Failed!! Please Contact to IT dept.. ');
+                    alert(' Received Process is Failed!! Please Contact to IT dept.. ');
                 }
 
             },

@@ -104,8 +104,15 @@ namespace OnlineApp.ModelData
         //public Nullable<System.DateTime> AppDate2 { get; set; }
         public string AppFlag2 { get; set; }
         public string AppRemarks2 { get; set; }
-       // public string CreateBy { get; set; }
-       // public Nullable<System.DateTime> CreateDate { get; set; }
+        // public string CreateBy { get; set; }
+        // public Nullable<System.DateTime> CreateDate { get; set; }
+        public Nullable<decimal> VATPer { get; set; }
+        public Nullable<decimal> TAXPer { get; set; }
+        public Nullable<decimal> DiscountPer { get; set; }
+        public Nullable<decimal> DiscountAmt { get; set; }
+        public Nullable<int> CashCheque { get; set; }
+        public Nullable<int> PaymentType { get; set; }
+        public string MultipleSup { get; set; }
         public List<FrdReceiveDetail> itemdtl { get; set; }
     }
     public  class ApprovalVM

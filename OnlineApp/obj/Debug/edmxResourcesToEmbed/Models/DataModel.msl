@@ -88,6 +88,7 @@
     <EntitySetMapping Name="FrdMachines">
       <EntityTypeMapping TypeName="LIVEModel.FrdMachine">
         <MappingFragment StoreEntitySet="FrdMachine">
+          <ScalarProperty Name="PID" ColumnName="PID" />
           <ScalarProperty Name="Flag" ColumnName="Flag" />
           <ScalarProperty Name="MachineType" ColumnName="MachineType" />
           <ScalarProperty Name="PlantName" ColumnName="PlantName" />
@@ -244,18 +245,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="FrdReceiveDetails">
-      <EntityTypeMapping TypeName="LIVEModel.FrdReceiveDetail">
-        <MappingFragment StoreEntitySet="FrdReceiveDetail">
-          <ScalarProperty Name="TotalAmt" ColumnName="TotalAmt" />
-          <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-          <ScalarProperty Name="ItemID" ColumnName="ItemID" />
-          <ScalarProperty Name="ReqRecID" ColumnName="ReqRecID" />
-          <ScalarProperty Name="PlantID" ColumnName="PlantID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="sPageNames">
       <EntityTypeMapping TypeName="LIVEModel.sPageName">
         <MappingFragment StoreEntitySet="sPageName">
@@ -370,32 +359,6 @@
           <ScalarProperty Name="TranDate" ColumnName="TranDate" />
           <ScalarProperty Name="LocalForeign" ColumnName="LocalForeign" />
           <ScalarProperty Name="ReceivedTranNo" ColumnName="ReceivedTranNo" />
-          <ScalarProperty Name="PlantID" ColumnName="PlantID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="FrdReceiveMasters">
-      <EntityTypeMapping TypeName="LIVEModel.FrdReceiveMaster">
-        <MappingFragment StoreEntitySet="FrdReceiveMaster">
-          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="AppRemarks2" ColumnName="AppRemarks2" />
-          <ScalarProperty Name="AppFlag2" ColumnName="AppFlag2" />
-          <ScalarProperty Name="AppDate2" ColumnName="AppDate2" />
-          <ScalarProperty Name="AppBy2" ColumnName="AppBy2" />
-          <ScalarProperty Name="AppRemarks" ColumnName="AppRemarks" />
-          <ScalarProperty Name="AppFlag" ColumnName="AppFlag" />
-          <ScalarProperty Name="AppDate" ColumnName="AppDate" />
-          <ScalarProperty Name="AppBy" ColumnName="AppBy" />
-          <ScalarProperty Name="UserNote" ColumnName="UserNote" />
-          <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
-          <ScalarProperty Name="RecDate" ColumnName="RecDate" />
-          <ScalarProperty Name="CustID" ColumnName="CustID" />
-          <ScalarProperty Name="DeptID" ColumnName="DeptID" />
-          <ScalarProperty Name="ReqID" ColumnName="ReqID" />
-          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
-          <ScalarProperty Name="ReqRecID" ColumnName="ReqRecID" />
           <ScalarProperty Name="PlantID" ColumnName="PlantID" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -615,6 +578,65 @@
           <ScalarProperty Name="ItemType" ColumnName="ItemType" />
           <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
           <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+          <ScalarProperty Name="PlantID" ColumnName="PlantID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FrdPlants">
+      <EntityTypeMapping TypeName="LIVEModel.FrdPlant">
+        <MappingFragment StoreEntitySet="FrdPlant">
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="PDesc" ColumnName="PDesc" />
+          <ScalarProperty Name="PCode" ColumnName="PCode" />
+          <ScalarProperty Name="PID" ColumnName="PID" />
+          <ScalarProperty Name="PlantID" ColumnName="PlantID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FrdReceiveDetails">
+      <EntityTypeMapping TypeName="LIVEModel.FrdReceiveDetail">
+        <MappingFragment StoreEntitySet="FrdReceiveDetail">
+          <ScalarProperty Name="CurrVal" ColumnName="CurrVal" />
+          <ScalarProperty Name="Curr" ColumnName="Curr" />
+          <ScalarProperty Name="TotalAmt" ColumnName="TotalAmt" />
+          <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+          <ScalarProperty Name="ReqRecID" ColumnName="ReqRecID" />
+          <ScalarProperty Name="PlantID" ColumnName="PlantID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FrdReceiveMasters">
+      <EntityTypeMapping TypeName="LIVEModel.FrdReceiveMaster">
+        <MappingFragment StoreEntitySet="FrdReceiveMaster">
+          <ScalarProperty Name="MultipleSup" ColumnName="MultipleSup" />
+          <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+          <ScalarProperty Name="CashCheque" ColumnName="CashCheque" />
+          <ScalarProperty Name="DiscountAmt" ColumnName="DiscountAmt" />
+          <ScalarProperty Name="DiscountPer" ColumnName="DiscountPer" />
+          <ScalarProperty Name="TAXPer" ColumnName="TAXPer" />
+          <ScalarProperty Name="VATPer" ColumnName="VATPer" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="AppRemarks2" ColumnName="AppRemarks2" />
+          <ScalarProperty Name="AppFlag2" ColumnName="AppFlag2" />
+          <ScalarProperty Name="AppDate2" ColumnName="AppDate2" />
+          <ScalarProperty Name="AppBy2" ColumnName="AppBy2" />
+          <ScalarProperty Name="AppRemarks" ColumnName="AppRemarks" />
+          <ScalarProperty Name="AppFlag" ColumnName="AppFlag" />
+          <ScalarProperty Name="AppDate" ColumnName="AppDate" />
+          <ScalarProperty Name="AppBy" ColumnName="AppBy" />
+          <ScalarProperty Name="UserNote" ColumnName="UserNote" />
+          <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
+          <ScalarProperty Name="RecDate" ColumnName="RecDate" />
+          <ScalarProperty Name="CustID" ColumnName="CustID" />
+          <ScalarProperty Name="DeptID" ColumnName="DeptID" />
+          <ScalarProperty Name="ReqID" ColumnName="ReqID" />
+          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+          <ScalarProperty Name="ReqRecID" ColumnName="ReqRecID" />
           <ScalarProperty Name="PlantID" ColumnName="PlantID" />
         </MappingFragment>
       </EntityTypeMapping>

@@ -25,11 +25,13 @@
             @Html.DropDownList("TypeCode", null, "Must Select One", new { @class = "form-control" })
             <label>Supplier Name :</label>
             @Html.DropDownList("SupplierID", null, "Select a Supplier One", new { @class = "form-control" })*@          
-            <label>Note:</label>
-            @Html.TextBox("UserNote", null, new { placeholder = "User Note Field Optional", @class = "form-control", @style = "text-align:left;color:blue;font:bold" })
+            <label>User Note:</label>
+            @Html.TextBox("UserNote", null, new { placeholder = "User Note Field Optional", @class = "form-control", @style = "text-align:left;color:blue;font:bold", @readonly = "readonly" })
             <label>Supplier Name:</label>
-            @Html.TextBox("SupplierName", null, new { placeholder = "User Note Field Optional", @class = "form-control", @style = "text-align:left;color:blue;font:bold" })
-            <label>Remarks:</label>
+            @Html.TextBox("SupplierName", null, new { placeholder = "User Note Field Optional", @class = "form-control", @style = "text-align:left;color:blue;font:bold", @readonly = "readonly" })
+            <label style="color:red">Approval Forward To :</label>
+            @Html.DropDownList("Appval", null, "Must Select One", new { @class = "form-control" })
+            <label>Your Remarks:</label>
             @Html.TextBox("FirstRemarks", null, new { placeholder = "Remarks Field Optional", @class = "form-control", @style = "text-align:left;color:blue;font:bold" })
             <input type="button" id="btnReset" value="Reset" class="btn btn-primary btn-sm btn-block" onclick="ReLoad()" ; />
         </div>
@@ -38,7 +40,7 @@
 <div class="panel-body">
     <div class="row">
         <div class="col-md-4">           
-            <input type="button" id="btnCancel" value="Cancel" class="btn btn-primary btn-sm btn-block" onclick="Cancel()" ; />
+            <input type="button" id="btnCancel" value="Cancel" class="btn btn-primary btn-sm btn-block" onclick="ffnApp();" />
         </div>
         <div class="col-md-4">
             <input type="button" id="create" value="Approved" class="btn btn-primary btn-sm btn-block" onclick="ffnApproved();" />
@@ -78,7 +80,7 @@
             $.each(data, function (i, Req) {
                 $("#DeptID").val(Req.DeptID);
                 $("#DeptName").val(Req.DeptName);
-                $("#UserNote").val(Req.UserNote); SupplierName
+                $("#UserNote").val(Req.UserNote);
                 $("#SupplierName").val(Req.NameAdd);
                 var table = document.getElementById("recItem");
                 var rowcount = i + 1;
@@ -99,9 +101,10 @@
         error: function () {
             alert("Failed! to load data for this transaction.Please Check....");
         }
-    }); 
+        });
+        $('#Appval').focus();
         document.getElementById("ReqRecID").disabled = true;
-        document.getElementById("create").disabled = false;
+       // document.getElementById("create").disabled = false;
     });
     function ReLoad() {
         alert("Are you sure reset the page ...?")
@@ -125,7 +128,7 @@
                 PlantID: $('#WarehouseID').val(),                
                 RefNo: $('#ReqRecID').val(),
                 FirstRemarks: $('#FirstRemarks').val(),
-               // SupplierID: $('#SupplierID').val(),
+                AppType: $('#Appval').val(),
                // TypeCode: $('#TypeCode').val(),
                 //itemdtl: OrderData
             }
@@ -141,12 +144,12 @@
                 //check is successfully save to database
                 if (a.status == true) {
                     //will send status from server side
-                    alert('Successfully Done... Requisition Received Token No:' + a.v);
+                    alert('Successfully Done... Approval Token No:' + a.v);
                     window.location.reload();                   
 
                 }
                 else {
-                    alert('Requisition Received Process is Failed!! Please Contact to IT dept.. ');
+                    alert('Approval Process is Failed!! Please Contact to IT dept.. ');
                 }
 
             },
@@ -155,4 +158,61 @@
             }
         });
     }
+    function ffnApp() {
+        document.getElementById("create").disabled = true;
+        var answer = confirm('Are you sure you want to Cancel this?');
+        if (answer) {
+            //  return;
+            //return status;
+        }
+        else {
+            return false;
+        }
+        var isAllValid = true;
+        var status = true;
+
+        if (isAllValid) {
+            var data = {
+                PlantID: $('#WarehouseID').val(),
+                RefNo: $('#ReqRecID').val(),
+                FirstRemarks: $('#FirstRemarks').val(),
+                //AppType: $('#Appval').val(),
+                // TypeCode: $('#TypeCode').val(),
+                //itemdtl: OrderData
+            }
+        }
+        console.log(data);
+        $.ajax({
+            url: '/OrderRequest/Cancel',
+            type: "POST",
+            data: JSON.stringify(data),
+            dataType: "JSON",
+            contentType: "application/json",
+            success: function (a) {
+                //check is successfully save to database
+                if (a.status == true) {
+                    //will send status from server side
+                    alert('Cancel the process...');
+                    window.location.reload();
+
+                }
+                else {
+                    alert('Cancel Process is Failed!! Please Contact to IT dept.. ');
+                }
+
+            },
+            error: function () {
+                alert('Error. Please try again.');
+            }
+        });
+    }
+    $("#Appval").change(function () {
+        if ($('#Appval').val() != "") {
+            document.getElementById("create").disabled = false;
+        }
+        else {
+            document.getElementById("create").disabled = true;
+        }
+    });
+  
 </script>

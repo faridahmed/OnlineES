@@ -37,6 +37,12 @@ namespace OnlineApp.Controllers
             var data = databaseManager.FrdItems.Where(c => c.PlantCode == inCustomer && c.Show == "N").OrderBy(c => c.ItemDescription).Select(c => new { id = c.ItemNo, name = c.ItemDescription + " , " + c.ItemCode }).ToList();
             return Json(data, "data", JsonRequestBehavior.AllowGet);
         }
+        //[HttpGet]
+        //public JsonResult getItemPartCode(int inCustomer)
+        //{
+        //    var data = databaseManager.FrdItemInfoes.Where(c => c.PlantID == inCustomer).OrderBy(c => c.ItemCode).Select(c => new { id = c.ItemID, name = c.ItemCode + " , " + c.ItemID }).ToList();
+        //    return Json(data, "data", JsonRequestBehavior.AllowGet);
+        //}
         [HttpGet]
         public JsonResult getItemDesc(int inCustomer)
         {
@@ -87,6 +93,7 @@ namespace OnlineApp.Controllers
                         obd.ItemID = i.ItemID;
                         obd.Quantity = i.Quantity;
                         obd.UnitPrice = 0;
+                        obd.TotalAmt = 0;
                         ddd.FrdRequestDetails.Add(obd);
                     }
                 }
@@ -113,7 +120,7 @@ namespace OnlineApp.Controllers
             ViewBag.ReqID = new SelectList((from s in databaseManager.FrdRequestMasters
                                             join cust in databaseManager.sBenificiaries
                                                    on s.CustomerID equals cust.BenificiaryID
-                                            where s.PlantID == cust.PlantID && s.PlantID == w.PlantNo && s.Status == "I"
+                                            where s.PlantID == cust.PlantID && s.PlantID == w.PlantNo && (s.Status =="I" || s.Status=="M")
                                             orderby s.ReqID descending
                                             select new
                                             {
@@ -132,6 +139,16 @@ namespace OnlineApp.Controllers
                 "Name"
             );
             ViewBag.TypeCode = tCode;
+            var sup = new SelectList(
+            new[]
+                {
+                       new { ID = "Y", Name = "No" },
+                       new { ID = "N", Name = "Yes" },
+                },
+                "ID",
+                "Name"
+            );
+            ViewBag.MultipleSup = sup;
             return View("OrderReceive");
         }
         public JsonResult RequestData(int inWarehouseID, int inTrNo)
@@ -176,6 +193,13 @@ namespace OnlineApp.Controllers
                             dbo.SupplierID = D.SupplierID;
                             dbo.UserNote = D.UserNote;
                             dbo.TypeCode = D.TypeCode;
+                            dbo.CashCheque = D.CashCheque;
+                            dbo.PaymentType = D.PaymentType;
+                            dbo.VATPer = D.VATPer;
+                            dbo.TAXPer = D.TAXPer;
+                            dbo.DiscountPer = D.DiscountPer;
+                            dbo.DiscountAmt = D.DiscountAmt;
+                            dbo.MultipleSup = D.MultipleSup;
 
                             if (D.TypeCode == 20)
                             {
@@ -197,19 +221,28 @@ namespace OnlineApp.Controllers
                         {
                             FrdReceiveDetail obd = new FrdReceiveDetail();
                             {
+                                decimal amt = 0;
+                                amt = Convert.ToDecimal(i.Quantity * i.UnitPrice);
                                 obd.PlantID = D.PlantID;
                                 obd.ReqRecID = maxrNo;
                                 obd.ItemID = i.ItemID;
                                 obd.Quantity = i.Quantity;
                                 obd.UnitPrice = i.UnitPrice;
-                                obd.TotalAmt = 0;
+                                obd.TotalAmt = amt;
                                 databaseManager.FrdReceiveDetails.Add(obd);
                             }
                         }
                         var result = databaseManager.FrdRequestMasters.SingleOrDefault(b => b.ReqID == D.ReqID);
                         if (result != null)
                         {
-                            result.Status = "A";
+                            if (D.MultipleSup == "N")
+                            {
+                                result.Status = "M";
+                            }
+                            else
+                            {
+                                result.Status = "A";
+                            }
                             databaseManager.SaveChanges();
                         }
                         databaseManager.SaveChanges();
@@ -255,20 +288,21 @@ namespace OnlineApp.Controllers
                                                select new
                                                {
                                                    ReqRecID = s.ReqRecID,
-                                                   CustomerID = cust.SupplierName + " (" + s.ReqRecID + ") " + s.ReqRecID
+                                                   CustomerID = s.ReqRecID + " - " + cust.SupplierName
                                                }),
            "ReqRecID", "CustomerID", null);
             // ViewBag.SupplierID = new SelectList(databaseManager.FrdSuppliers.OrderBy(x => x.SupplierName), "SupplierID", "SupplierName");
-            //var tCode = new SelectList(
-            //new[]
-            //    {
-            //           new { ID = 20, Name = "Purcahse Need" },
-            //           new { ID = 10, Name = "Stock Available for Deliver" },
-            //    },
-            //    "ID",
-            //    "Name"
-            //);
-            //ViewBag.TypeCode = tCode;
+            var appcode = new SelectList(
+            new[]
+                {
+                 new { ID = 10, Name = "No Need PM Approval" },
+                 new { ID = 20, Name = "Need PM Approval" },
+                      
+                },
+                "ID",
+                "Name"
+            );
+            ViewBag.Appval = appcode;
             return View("ORApproved");
         }
         public JsonResult PurchaseData(int inWarehouseID, int inTrNo)
@@ -281,7 +315,7 @@ namespace OnlineApp.Controllers
         public ActionResult Approved(ApprovalVM D)
         {
             bool status = false;
-            string mes = "";
+            string mes = "";           
             var w = (from y in databaseManager.sUsers
                      where y.UserID.ToString() == User.Identity.Name
                      select new { y.PlantNo }).FirstOrDefault();
@@ -292,7 +326,7 @@ namespace OnlineApp.Controllers
             var maxreqno = (from n in databaseManager.FrdApprovals where n.PlantID == w.PlantNo select n.AppID).DefaultIfEmpty(reqno).Max();
             var maxrNo = maxreqno + 1;
             string Code = string.Concat("APP" + maxreqno + "RM");
-            int v = maxrNo;
+            int v = maxrNo;            
             try
             {
                 // using (LIVEEntities ddd = new LIVEEntities())
@@ -329,13 +363,97 @@ namespace OnlineApp.Controllers
                         };
                         databaseManager.FrdApprovals.Add(dbo);
                         var result = databaseManager.FrdReceiveMasters.SingleOrDefault(b => b.ReqRecID == D.RefNo);
+                     
                         if (result != null)
                         {
-                            result.AppFlag = "A";
-                            result.AppDate = DateTime.Today;
-                            result.AppBy = User.Identity.Name;
-                            result.AppRemarks = D.FirstRemarks;
-                            databaseManager.SaveChanges();
+                            if (D.AppType == 20)
+                            {
+                                result.AppFlag = "A";
+                                result.AppDate = DateTime.Today;
+                                result.AppBy = User.Identity.Name;
+                                result.AppRemarks = D.FirstRemarks;
+                                databaseManager.SaveChanges();
+                            }
+                            else
+                            {
+                                result.AppFlag = "A";
+                                result.AppDate = DateTime.Today;
+                                result.AppBy = User.Identity.Name;
+                                result.AppRemarks = D.FirstRemarks;
+                                result.AppBy2 = "NA";
+                                result.AppDate2 = DateTime.Today;
+                                result.AppFlag2 = "N";
+                                result.Status = "APP";
+                                databaseManager.SaveChanges();
+
+                            }
+                        }
+                        databaseManager.SaveChanges();
+                        transaction.Commit();
+                        status = true;
+                        databaseManager.Dispose();
+                        ModelState.Clear();
+
+                    }
+
+                    else
+                    {
+                        status = false;
+                        transaction.Rollback();
+
+                    }
+                    return new JsonResult { Data = new { status = status, mes = mes, v = v } };
+                }
+            }
+            catch (Exception ex)
+            {
+                string mess = ex.Message;
+                return Json(new { status = "error", message = "Error Generate" });
+
+            }
+        }
+        public ActionResult Cancel(ApprovalVM D)
+        {
+            bool status = false;
+            string mes = "";
+            var w = (from y in databaseManager.sUsers
+                     where y.UserID.ToString() == User.Identity.Name
+                     select new { y.PlantNo }).FirstOrDefault();
+            var wn = databaseManager.sPlants.Where(x => x.PlantNo == w.PlantNo).FirstOrDefault();
+            string s1 = w.PlantNo.ToString();
+            string s2 = string.Concat(s1 + "0000000");
+            int reqno = Convert.ToInt32(s2);
+            var maxreqno = (from n in databaseManager.FrdApprovals where n.PlantID == w.PlantNo select n.AppID).DefaultIfEmpty(reqno).Max();
+            var maxrNo = maxreqno + 1;
+            string Code = string.Concat("APP" + maxreqno + "RM");
+            int v = maxrNo;
+            try
+            {
+                // using (LIVEEntities ddd = new LIVEEntities())
+                using (var transaction = databaseManager.Database.BeginTransaction())
+                {
+                    if (ModelState.IsValid)
+                    {
+                        FrdApproval dbo = new FrdApproval();
+                        {
+                            dbo.AppID = maxrNo;
+                            dbo.PlantID = D.PlantID;
+                            dbo.RefNo = D.RefNo;
+                            dbo.AppType = 1;
+                            dbo.AppCode = Code;
+                            //dbo.FirstApp = D.ReqID;
+                            dbo.FirstRemarks = D.FirstRemarks;
+                            dbo.FirstStatus = "C";
+                            
+                            dbo.FirstDate = DateTime.Now;
+                            dbo.FirstApp = User.Identity.Name;
+                        };
+                        databaseManager.FrdApprovals.Add(dbo);
+                        var result = databaseManager.FrdReceiveMasters.SingleOrDefault(b => b.ReqRecID == D.RefNo);
+
+                        if (result != null)
+                        {
+                            result.Status = "CAN";         
                         }
                         databaseManager.SaveChanges();
                         transaction.Commit();
@@ -377,7 +495,7 @@ namespace OnlineApp.Controllers
             ViewBag.ReqRecID = new SelectList((from s in databaseManager.FrdReceiveMasters
                                                join cust in databaseManager.FrdSuppliers
                                                       on s.SupplierID equals cust.SupplierID
-                                               where s.PlantID == cust.BranchCode && s.PlantID == w.PlantNo && s.AppFlag == "A" && s.AppBy != "XXXXX"
+                                               where s.PlantID == cust.BranchCode && s.PlantID == w.PlantNo && s.AppFlag == "A" && s.AppBy != "XXXXX" && s.Status!="APP"
                                                orderby s.ReqRecID descending
                                                select new
                                                {
@@ -512,7 +630,7 @@ namespace OnlineApp.Controllers
                 catch (Exception ex)
                 {
                     return Json(new { status = "error", message = "sms Not Send" });
-                    //throw ex;
+                    throw ex;
                 }
             }
             else
@@ -521,5 +639,22 @@ namespace OnlineApp.Controllers
             }
             return new JsonResult { Data = new { status = status, mes = mes } };
         }
+        public JsonResult GetItemList(string searchTerm)
+        {
+            var CounrtyList = databaseManager.FrdItems.OrderBy(c => c.ItemDescription).ToList();
+
+            if (searchTerm != null)
+            {
+                CounrtyList = databaseManager.FrdItems.Where(x => x.ItemName.Contains(searchTerm)).ToList();
+            }
+
+            var modifiedData = CounrtyList.Select(x => new
+            {
+                id = x.ItemNo,
+                text = x.ItemName
+            });
+            return Json(modifiedData, JsonRequestBehavior.AllowGet);
+        }
+       
     }
 }

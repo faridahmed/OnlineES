@@ -12,8 +12,8 @@ namespace OnlineApp.Controllers
     [Authorize]
     public class UserManageController : Controller
     {
-        public LIVEEntities db = new LIVEEntities();
-        private LIVEEntities databaseManager = new LIVEEntities();
+        private LIVEEntities db = new LIVEEntities();
+        //private LIVEEntities databaseManager = new LIVEEntities();
         // GET: UserManage
         public ActionResult Index()
         {
@@ -101,21 +101,18 @@ namespace OnlineApp.Controllers
         [HttpGet]
         public JsonResult GetMenuList(int inType)
         {
-            using (LIVEEntities db = new LIVEEntities())
+            try
             {
-                try
-                {
-
-                    var MenuData = db.sPageNames.Where(x => x.PageType == inType).ToList();
-                    //var xv = MenuData.Count();
-                    return new JsonResult { Data = MenuData, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-                }
-                catch (Exception ex)
-                {
-                    return Json(new { status = "error", message = "Not Assign" });
-                    throw ex;
-                }
+                var men = db.sPageNames.Where(x => x.PageType == inType);
+                //var xv = MenuData.Count();
+                return new JsonResult { Data = men, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             }
+            catch (Exception ex)
+            {
+                return Json(new { status = "error", message = "Not Assign" });
+                throw ex;
+            }
+
         }
         public ActionResult ChangePass()
         {
@@ -151,25 +148,25 @@ namespace OnlineApp.Controllers
         {
             bool status = false;
             string mes = "";
-            var w = (from y in databaseManager.sUsers
+            var w = (from y in db.sUsers
                      where y.UserID.ToString() == User.Identity.Name
                      select new { y.UserID }).FirstOrDefault();
             try
             {
-                using (var transaction = databaseManager.Database.BeginTransaction())
+                using (var transaction = db.Database.BeginTransaction())
                 {
                     if (ModelState.IsValid)
                     {
-                        var result = databaseManager.sUsers.SingleOrDefault(b => b.UserID == w.UserID);
+                        var result = db.sUsers.SingleOrDefault(b => b.UserID == w.UserID);
                         if (result != null)
                         {
                             result.UserPass = D.NewPass ;
                             result.UserPin = D.UserPass;                      
                         }
-                        databaseManager.SaveChanges();
+                        db.SaveChanges();
                         transaction.Commit();
                         status = true;
-                        databaseManager.Dispose();
+                        db.Dispose();
                         ModelState.Clear();
                     }
                     else

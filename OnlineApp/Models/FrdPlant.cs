@@ -12,15 +12,13 @@ namespace OnlineApp.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class FrdReceiveDetail
+    public partial class FrdPlant
     {
+        public int ID { get; set; }
         public int PlantID { get; set; }
-        public int ReqRecID { get; set; }
-        public int ItemID { get; set; }
-        public Nullable<int> Quantity { get; set; }
-        public Nullable<decimal> UnitPrice { get; set; }
-        public Nullable<decimal> TotalAmt { get; set; }
-        public string Curr { get; set; }
-        public Nullable<decimal> CurrVal { get; set; }
+        public int PID { get; set; }
+        public string PCode { get; set; }
+        public string PDesc { get; set; }
+        public string Active { get; set; }
     }
 }

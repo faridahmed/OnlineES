@@ -1,56 +1,50 @@
 ﻿@model OnlineApp.ModelData.MenuSubVM
-<h2>User Menu Rights Control</h2>
+<h2>User Rights</h2>
 <div class="panel-body">
     <div class="row">
         <div class="col-md-6">
             <div>
-                <label style="color:red">Select user ID</label>
+                <label style="color:red">Select User ID</label>
                 @*@Html.TextBox("userID", null, new { @class = "form-control", @Value = ViewBag.userID, @readonly = "readonly" })*@
                 @Html.DropDownList("userID", null, "Select user", new { @class = "form-control" })
-                <label>user Name</label>
+                <label>User Name</label>
                 @Html.TextBox("userName", null, new { @class = "form-control", @readonly = "readonly" })
                 <label>Email</label>
                 @Html.TextBox("Email", null, new { @class = "form-control", @readonly = "readonly" })
-                <label>Mobile No</label>
-                @Html.TextBox("MobileNo", null, new { @class = "form-control", @readonly = "readonly" })
-                <label>Role Id</label>
-                @Html.TextBox("RoleId", null, new { @class = "form-control", @readonly = "readonly" })
-                <label>Plant Number</label>
-                @Html.TextBox("PlantNo", null, new { @class = "form-control", @readonly = "readonly" })
-                <label style="color:red">Select Type</label>
-                @Html.DropDownList("PageType", null, "Select Type", new { @class = "form-control" })
+                
+               
             </div>
         </div>
-    </div>
+        <div class="col-md-6">
+            @*<label>Role Id</label>
+            @Html.TextBox("RoleId", null, new { @class = "form-control", @readonly = "readonly" })*@
+            <label>Mobile No</label>
+            @Html.TextBox("MobileNo", null, new { @class = "form-control", @readonly = "readonly" })
+            <label>Plant Number</label>
+            @Html.TextBox("PlantNo", null, new { @class = "form-control", @readonly = "readonly" })
+            <label style="color:red">Select Type</label>
+            @Html.DropDownList("PageType", null, "Select Type", new { @class = "form-control" })
+
+       </div>
+     </div>
     <!---another div row starts-->
     <br /><br />
     <div class="row">
         <div class="col-md-9">
             <button type="button" id="btnsearch" class="btn btn-info" onclick="datasearch()">Show Menu</button>
-            <button type="button" id="btnReset" class="btn btn-info">Reset</button>
+            <button type="button" id="btnReset" class="btn btn-info"  onclick="ReLoad()">Reset</button>
             <button id="btnSave" type="button" class="btn btn-info">Save</button>
             <br />
-            <div style="height: 300px; overflow: auto;">
-                <table class="table table-bordered" id="MenuList">
-
+            <div style="height: 300px; overflow: auto;">               
+                <table id="recItem" class="table-responsive table-striped table-bordered">
                     <tr>
-                        <th>
-                            Controller
-                        </th>
-                        <th>
-                            File Name
-                        </th>
-                        <th>
-                            Menu ID
-                        </th>
-                        <th>
-                            Page Name
-                        </th>
-                        <th>
-                            Sl
-                        </th>
+                        <th>SL</th>
+                        <th>Menu No</th>
+                        <th>File Name</th>
+                        <th>Controlling</th>
+                        <th>Page Name</th>
+                        <th>Select</th>
                     </tr>
-
                 </table>
 
             </div>
@@ -59,23 +53,20 @@
     </div>
     <!---another div row Ends-->
 </div>
-@section Scripts{
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script type="text/javascript">
 
+<script>
 
     $("#userID").change(function () {
         $.ajax({
-            url: "@Url.Action("GetuserInfo", "userManage")",
-            data: { puserID: $("#pUserID").val() },
+            url: "@Url.Action("GetuserInfo", "UserManage")",
+            data: { pUserID: $("#userID").val() },
             type: "GET",
             dataType: "json",
             success: function (data) {
-                $("#userName").val(data[0].userName);
+                $("#userName").val(data[0].UserName);
                 $("#Email").val(data[0].Email);
                 $("#MobileNo").val(data[0].MobileNo);
-                $("#RoleId").val(data[0].RoleId);
+                //$("#RoleId").val(data[0].RoleId);
                 $("#PlantNo").val(data[0].PlantNo);
 
             },
@@ -83,9 +74,9 @@
                 alert("Failed! for the user..");
             }
         });
-        });
-        ///
-        $("#PageType").change(function () {
+     });
+ 
+        @*$("#PageType").change(function () {
             $.ajax({
                 type: 'GET',
                 url: "@Url.Action("GetMenuList", "UserManage")",
@@ -106,10 +97,89 @@
                 },
                 error: function (data) { alert(data.responseText); }
             });
-        });
+        });*@
+    function ReLoad() {
+        alert("Are you sure Reset ...?")
+        location.reload();
+    }
+    function datasearcheee() {
+        $.ajax({
+            url: "@Url.Action("GetMenuList", "UserManage")",
+            data: { inType: $('#PageType').val()},
+            type: "GET",
+            dataType: "json",
+            //contentType: "application/json",
+            success: function (data) {
+            console.log(data);
+            $.each(data, function (i, men) {
+                alert(i + 'item' + men.SLNo);
+                var table = document.getElementById("recItem");
+                var rowcount = i + 1;
+                var tblRow = '<tr id="row' + rowcount + '">' +
+                   '<td>' +
+                       '<label id="lblID' + rowcount + '">' + rowcount + '</label>' +
+               '</td>' +
+               '<td><input type="text"  readonly id="tSlNo' + rowcount + '" value="' + men.SLNo + '"size ="4" /></td>' +
+               '<td><input type="text"  readonly id="tDescription' + rowcount + '" value="' + men.FileName + '"size ="29" /></td>' +
+               '<td><input type="text"  readonly id="tController' + rowcount + '" value="' + men.ContName + '"size ="15" /></td>' +
+               '<td><input type"text"   readonly id="tAction' + rowcount + '" value="' + men.PageName + '"size ="15" /></td>' +
+               '<td><input type"text"   readonly id="tMenuId' + rowcount + '" value="' + men.MenuID + '"size ="2" /></td>' +
+               '<td><input type="checkbox" id="myCheck' + rowcount + '" value="1" size ="1"   /></td>' +
+               '</tr>'
+                alert("SSS! to found menu lists....Please check");
+                $("#recItem").append(tblRow);
+            })
+        },
+        error: function () {
+            alert("Failed! to found menu lists....Please check");
+        }
+    });
+    //$("#btnsearch").prop('disabled', true);
+    $("#btnSave").prop('disabled', false);
+  };
+    $('#PageType').change(function () {
+        $.ajax({
+            url: "@Url.Action("GetMenuList", "UserManage")",
+            data: { inType: $('#PageType').val()},
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
+            $.each(data, function (i, Req) {
+               // $("#DeptID").val(Req.DeptID);
+                //$("#DeptName").val(Req.DeptName);
+                var table = document.getElementById("recItem");
+                var rowcount = i + 1;
+                var tblRow = '<tr id="row' + rowcount + '">' +
+                   '<td>' +
+                       '<label id="lblID' + rowcount + '">' + rowcount + '</label>' +
+               '</td>' +
+               '<td><input type="text"  readonly id="tItemID' + rowcount + '" value="' + Req.SLNo + '"size ="6"' + '" style="text-align:center;"" /></td>' +
+               '<td><input type="text"  readonly id="tDescription' + rowcount + '" value="' + Req.FileName + '"size ="25" /></td>' +
+               '<td><input type="text"  readonly id="tStockQuantity' + rowcount + '" value="' + Req.ContName + '"size ="12"' + '" style="text-align:right;"" /></td>' +
+               '<td><input type="text"  id="tUnitPrice' + rowcount + '" value="' + Req.PageName + '"size ="12"' + '" style="text-align:right;"" /></td>' +
+               '<td><input type="text"  id="tReqQuantity' + rowcount + '" value="' + Req.MenuID + '"size ="12"' + '" style="text-align:right;"" /></td>' +
+               '<td><a class="Delete" href="javascript:;"> Delete </a></td>' +
+               '</tr>'
+                $("#recItem").append(tblRow);
+            })
+            //var nth = $("table").find("tr").length;
+            //var Cases = parseInt("0");
+            //var Boxes = parseInt("0");
+            //for (j = 1; j < nth; j++) {
+            //    Cases += parseFloat($("table").find("tr").eq(j).find("td:eq(3) input[type='text']").val());
+            //    Boxes += parseFloat($("table").find("tr").eq(j).find("td:eq(4) input[type='text']").val());
+            //}
+            // $("#totalCases").val(Cases);
+            //  $("#totalBoxes").val(Boxes);
+        },
+        error: function () {
+            alert("Failed! to load data for this transaction.Please Check....");
+        }
+    });
+  });
+
+</script>
 
 
-    </script>
 
-
-}

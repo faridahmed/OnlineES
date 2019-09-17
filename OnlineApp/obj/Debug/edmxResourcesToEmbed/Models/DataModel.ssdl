@@ -140,6 +140,7 @@
     <Property Name="PlantName" Type="int" Nullable="false" />
     <Property Name="MachineType" Type="int" />
     <Property Name="Flag" Type="varchar" MaxLength="1" />
+    <Property Name="PID" Type="int" />
   </EntityType>
   <EntityType Name="FrdParameter">
     <Key>
@@ -157,6 +158,19 @@
     <Property Name="Status" Type="varchar" MaxLength="1" />
     <Property Name="CreateBy" Type="varchar" MaxLength="30" />
     <Property Name="CreateDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="FrdPlant">
+    <Key>
+      <PropertyRef Name="PlantID" />
+      <PropertyRef Name="PID" />
+      <PropertyRef Name="PCode" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PlantID" Type="int" Nullable="false" />
+    <Property Name="PID" Type="int" Nullable="false" />
+    <Property Name="PCode" Type="varchar" MaxLength="5" Nullable="false" />
+    <Property Name="PDesc" Type="varchar" MaxLength="500" />
+    <Property Name="Active" Type="varchar" MaxLength="3" />
   </EntityType>
   <EntityType Name="FrdPurchase">
     <Key>
@@ -205,6 +219,8 @@
     <Property Name="Quantity" Type="int" />
     <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="4" />
     <Property Name="TotalAmt" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Curr" Type="varchar" MaxLength="50" />
+    <Property Name="CurrVal" Type="decimal" Precision="18" Scale="8" />
   </EntityType>
   <EntityType Name="FrdReceiveMaster">
     <Key>
@@ -231,6 +247,13 @@
     <Property Name="Status" Type="varchar" MaxLength="3" />
     <Property Name="CreateBy" Type="varchar" MaxLength="50" />
     <Property Name="CreateDate" Type="datetime" />
+    <Property Name="VATPer" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="TAXPer" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="DiscountPer" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="DiscountAmt" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="CashCheque" Type="int" />
+    <Property Name="PaymentType" Type="int" />
+    <Property Name="MultipleSup" Type="varchar" MaxLength="1" />
   </EntityType>
   <EntityType Name="FrdRequestDetail">
     <Key>
@@ -544,6 +567,7 @@
     <EntitySet Name="FrdItemTranInfo" EntityType="Self.FrdItemTranInfo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FrdMachine" EntityType="Self.FrdMachine" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FrdParameter" EntityType="Self.FrdParameter" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FrdPlant" EntityType="Self.FrdPlant" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FrdPurchase" EntityType="Self.FrdPurchase" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FrdPurchaseInfo" EntityType="Self.FrdPurchaseInfo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FrdReceiveDetail" EntityType="Self.FrdReceiveDetail" Schema="dbo" store:Type="Tables" />

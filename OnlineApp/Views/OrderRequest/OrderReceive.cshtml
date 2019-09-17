@@ -29,16 +29,31 @@
                 <input type="text" class="form-control" id="InAmount" value="0.00" readonly style="text-align:right" />*@
             <label style="color:red">Delivery/Purchase :</label>
             @Html.DropDownList("TypeCode", null, "Must Select One", new { @class = "form-control" })
+            <label style="color:red">Multiple Work Order :</label>
+            @Html.DropDownList("MultipleSup", null, "Must Select One", new { @class = "form-control" })
             <label>Supplier Name :</label>
             @Html.DropDownList("SupplierID", null, "Select a Supplier One", new { @class = "form-control" })            
             @*@Html.TextBox("SupplierID", null, new { placeholder = "Ref No Field Optinal", @class = "form-control" })*@
             <label>Remarks/Note:</label>
             @Html.TextBox("UserNote", null, new { placeholder = "Remarks Field Optional", @class = "form-control", @style = "text-align:left;color:blue;font:bold" })
             @*<input id="btnProduct" type="button" class="btn btn-primary btn-sm btn-block" value="Item Information" data-toggle="modal" data-target="#myModal" />*@
-            <label>Payment Term:</label>
-            @Html.DropDownList("PayType", null, "Select a  One", new { @class = "form-control" })
-            @Html.DropDownList("PayMode", null, "Select a  One", new { @class = "form-control" })
             
+           
+            
+        </div>
+        <div class="col-md-4"> 
+            <label style="color:red">Payment Mode:</label>
+            @Html.DropDownList("PayType", null, "Select a  One", new { @class = "form-control" })
+            <label style="color:red">Payment Type:</label>
+            @Html.DropDownList("PayMode", null, "Select a  One", new { @class = "form-control" })  
+            <label>VAT/TAX % :</label>
+            @Html.TextBox("VATPer", 0.00, new {@class = "form-control", @style = "text-align:right;color:red;font:bold" })  
+            @*<label>Discount%:</label>
+            @Html.TextBox("DiscountPer", 0, new {@class = "form-control"})*@
+            <label>Discount Amount:</label>
+            @Html.TextBox("DiscountAmt", 0.00, new {@class = "form-control" , @style = "text-align:right;color:red;font:bold" })                    
+            
+
         </div>
     </div>
 </div>
@@ -79,9 +94,15 @@
 </div>
 <script>
     document.getElementById("create").disabled = true;
-    $('#ReqID').change(function () {       
+    document.getElementById("MultipleSup").disabled = true;
+    document.getElementById("SupplierID").disabled = true;
+    document.getElementById("PayType").disabled = true;
+    document.getElementById("PayMode").disabled = true;
+    document.getElementById("VATPer").disabled = true;
+    document.getElementById("DiscountAmt").disabled = true;
+    $('#ReqID').change(function () {
         $.ajax({
-            url: "@Url.Action("RequestData", "OrderRequest")",           
+            url: "@Url.Action("RequestData", "OrderRequest")",
             data: { inWarehouseID: $('#WarehouseID').val(), inTrNo: $('#ReqID').val() },
         type: "GET",
         dataType: "json",
@@ -89,28 +110,27 @@
             ////console.log(data);
             $.each(data, function (i, Req) {
                 $("#DeptID").val(Req.DeptID);
-                $("#DeptName").val(Req.DeptName);         
+                $("#DeptName").val(Req.DeptName);
                 var table = document.getElementById("recItem");
-                // console.log(EmptyMove.ExpiryDate);
-                //$('#tblItem tbody').empty();
                 var rowcount = i + 1;
                 var tblRow = '<tr id="row' + rowcount + '">' +
                    '<td>' +
-                       '<label id="lblID' + rowcount + '">' + rowcount + '</label>' + 
+                       '<label id="lblID' + rowcount + '">' + rowcount + '</label>' +
                '</td>' +
                '<td><input type="text"  readonly id="tItemID' + rowcount + '" value="' + Req.ItemID + '"size ="6"' + '" style="text-align:center;"" /></td>' +
                '<td><input type="text"  readonly id="tDescription' + rowcount + '" value="' + Req.ItemName + '"size ="25" /></td>' +
                '<td><input type="text"  readonly id="tStockQuantity' + rowcount + '" value="' + Req.StockQty + '"size ="12"' + '" style="text-align:right;"" /></td>' +
                '<td><input type="text"  id="tUnitPrice' + rowcount + '" value="' + Req.UnitPrice + '"size ="12"' + '" style="text-align:right;"" /></td>' +
                '<td><input type="text"  id="tReqQuantity' + rowcount + '" value="' + Req.Quantity + '"size ="12"' + '" style="text-align:right;"" /></td>' +
+               '<td><a class="Delete" href="javascript:;"> Delete </a></td>' +
                '</tr>'
                 $("#recItem").append(tblRow);
             })
             //var nth = $("table").find("tr").length;
-            //var Cases = parseInt("0");           
+            //var Cases = parseInt("0");
             //var Boxes = parseInt("0");
             //for (j = 1; j < nth; j++) {
-            //    Cases += parseFloat($("table").find("tr").eq(j).find("td:eq(3) input[type='text']").val());               
+            //    Cases += parseFloat($("table").find("tr").eq(j).find("td:eq(3) input[type='text']").val());
             //    Boxes += parseFloat($("table").find("tr").eq(j).find("td:eq(4) input[type='text']").val());
             //}
            // $("#totalCases").val(Cases);
@@ -134,23 +154,31 @@
         else {
             return false;
         }
+        $(valid);
         var isAllValid = true;
         var status = true;
         OrderData = [];
         //debugger;
-        var id = $('#recItem tr:last').index()
-        $('#recItem tr').each(function (row, tr){
-            if ((row > 0) && (row <= id)) {
+        //var id = $('#recItem tr:last').index()
+       // $('#recItem tr').each(function (row, tr){
+        // if ((row > 0) && (row <= id)) {
+        var totalCount = $("#recItem").find("tr").length;
+        for(i=0;i<totalCount-1;i++)
+        {
                 OrderData.push({
                     //ItemID: $(tr).find('td:eq(1)').text(),
                     //UnitPrice:  $(tr).find('td:eq(4)').text(),
                     //Quantity: $(tr).find('td:eq(5)').text(),
-                    ItemID: $('#tItemID' + row).val().trim(),
-                    UnitPrice: $('#tUnitPrice' + row).val().trim(),
-                    Quantity: $('#tReqQuantity' + row).val().trim()
+                    //ItemID: $('#tItemID' + row).val(),
+                    ItemID: $("table").find("tr").eq(i + 1).find("td:eq(1) input[type='text']").val(),
+                    UnitPrice: $("table").find("tr").eq(i + 1).find("td:eq(4) input[type='text']").val(),
+                    Quantity: $("table").find("tr").eq(i + 1).find("td:eq(5) input[type='text']").val(),
+
+                    //UnitPrice: $('#tUnitPrice' + row).val(),
+                    //Quantity: $('#tReqQuantity' + row).val()
                 });
-            }
-        });
+            
+        };
        // console.log(OrderData);
         if (isAllValid) {
             var data = {
@@ -161,6 +189,13 @@
                 UserNote: $('#UserNote').val(),
                 SupplierID: $('#SupplierID').val(),
                 TypeCode: $('#TypeCode').val(),
+                PaymentType: $('#PayMode').val(),
+                CashCheque: $('#PayType').val(),
+                VATPer: $('#VATPer').val(),
+                DiscountPer: $('#DiscountPer').val(),
+                DiscountAmt: $('#DiscountAmt').val(),
+                MultipleSup: $('#MultipleSup').val(),
+
                 itemdtl: OrderData
             }
         }
@@ -192,22 +227,38 @@
             }
         });
     }
-    function ReLoad() {        
+    function ReLoad() {
         alert("Are you sure reset the page ...?")
         location.reload();
     }
     $("#TypeCode").change(function () {
-        //var c = $("#tItemCode").val();
-       // $("#ItemCode").val(c);
-        // $('#ItemCode').focus();
-       // itemdesc();
-        document.getElementById("create").disabled = false;
-       // $('#OrderQty').focus()
+        var c = $("#TypeCode").val();
+        if (c == 20) {
+            document.getElementById("MultipleSup").disabled = false;
+            document.getElementById("SupplierID").disabled = false;
+            document.getElementById("PayType").disabled = false;
+            document.getElementById("PayMode").disabled = false;
+            document.getElementById("VATPer").disabled = false;
+            document.getElementById("DiscountAmt").disabled = false;
+            document.getElementById("create").disabled = true;
+        }
+        else {
+            document.getElementById("MultipleSup").disabled = true;
+            document.getElementById("SupplierID").disabled = true;
+            document.getElementById("PayType").disabled = true;
+            document.getElementById("PayMode").disabled = true;
+            document.getElementById("VATPer").disabled = true;
+            document.getElementById("DiscountAmt").disabled = true;
+            document.getElementById("create").disabled = false;
+        }
+    });
+    $("#PayMode").change(function () {
+            document.getElementById("create").disabled = false;
     });
     function SMSsend() {
         //To Save New Item
         var Consms = "Dear Sir, For your kind information need aaproval for purchase." +
-             + " Ref No:" + $('#ReqID').val() + " Regrads Engineering Store";       
+             + " Ref No:" + $('#ReqID').val() + " Regrads Engineering Store";
 
         var data = {
             phoneno: $("#PhoneNo").val(),
@@ -239,4 +290,55 @@
         });
 
     };
+
+    $("body").on("click", "#recItem tr .Delete", function () {
+       // $(this).parent().parent().parent().fadeTo(400, 0, function () {
+       // $(this).remove();
+        $(this).closest("tr").remove();
+       // }
+       // );
+        return false;
+    });
+    $("#ProductInfo").on('click', '.btnDelete', function () {
+        //if (e.which == 13) {
+        //    alert('fff');
+        //}
+        //  alert(e.keyCode);
+        $(this).closest('tr').remove();
+    });
+    $(document).keypress(function (e) {
+        if (e.which == 13) {
+            return false;
+        }
+    });
+    function valid() {
+        //alert("Are you sure reset the page ...?")
+        //location.reload();
+        if ($('#TypeCode').val() == 20) {
+            if ($('#SupplierID').val() != "") {
+                return false;
+                $('#SupplierID').focus();
+                document.getElementById("create").disabled = false;
+            }
+            else{
+                return true;
+                document.getElementById("create").disabled = true;
+
+            }
+            if ($('#MultipleSup').val() != "") {
+                return false;
+                $('#MultipleSup').focus();
+                document.getElementById("create").disabled = false;
+            }
+            else {
+                return true;
+                document.getElementById("create").disabled = true;
+
+            }
+        }
+        else {
+            return true;
+        }
+    }
+
 </script>

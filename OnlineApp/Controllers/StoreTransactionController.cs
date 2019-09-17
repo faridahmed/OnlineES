@@ -69,7 +69,7 @@ namespace OnlineApp.Controllers
                      select new { y.PlantNo }).FirstOrDefault();
             var wn = databaseManager.sPlants.Where(x => x.PlantNo == w.PlantNo).FirstOrDefault();
             string s1 = w.PlantNo.ToString();
-            string s2 = string.Concat(s1 + "000000");
+            string s2 = string.Concat(s1 + "7000000");
             int reqno = Convert.ToInt32(s2);
             var maxreqno = (from n in databaseManager.FrdPurchases where n.PlantID == w.PlantNo select n.ReceivedTranNo).DefaultIfEmpty(reqno).Max();
             var maxrNo = maxreqno + 1;
@@ -196,7 +196,7 @@ namespace OnlineApp.Controllers
                      select new { y.PlantNo }).FirstOrDefault();
             var wn = databaseManager.sPlants.Where(x => x.PlantNo == w.PlantNo).FirstOrDefault();
             string s1 = w.PlantNo.ToString();
-            string s2 = string.Concat(s1 + "000000");
+            string s2 = string.Concat(s1 + "8000000");
             int reqno = Convert.ToInt32(s2);
             var maxreqno = (from n in databaseManager.FrdItemIssues where n.PlantID == w.PlantNo select n.TrNo).DefaultIfEmpty(reqno).Max();
             var maxrNo = maxreqno + 1;

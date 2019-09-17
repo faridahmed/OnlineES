@@ -48,7 +48,6 @@
     <EntitySet Name="sBenificiaries" EntityType="LIVEModel.sBenificiary" />
     <EntitySet Name="sDesignations" EntityType="LIVEModel.sDesignation" />
     <EntitySet Name="sUnits" EntityType="LIVEModel.sUnit" />
-    <EntitySet Name="FrdReceiveDetails" EntityType="LIVEModel.FrdReceiveDetail" />
     <EntitySet Name="sPageNames" EntityType="LIVEModel.sPageName" />
     <AssociationSet Name="fk_Menu" Association="LIVEModel.fk_Menu">
       <End Role="sMenu" EntitySet="sMenus" />
@@ -67,7 +66,6 @@
     </FunctionImport>
     <EntitySet Name="FrdPurchaseInfoes" EntityType="LIVEModel.FrdPurchaseInfo" />
     <EntitySet Name="FrdPurchases" EntityType="LIVEModel.FrdPurchase" />
-    <EntitySet Name="FrdReceiveMasters" EntityType="LIVEModel.FrdReceiveMaster" />
     <EntitySet Name="FrdStockMasters" EntityType="LIVEModel.FrdStockMaster" />
     <FunctionImport Name="spStockProduct">
       <Parameter Name="inPlant" Mode="In" Type="Int32" />
@@ -102,6 +100,9 @@
     <EntitySet Name="FrdItemTranInfoes" EntityType="LIVEModel.FrdItemTranInfo" />
     <EntitySet Name="sParams" EntityType="LIVEModel.sParam" />
     <EntitySet Name="FrdItemInfoes" EntityType="LIVEModel.FrdItemInfo" />
+    <EntitySet Name="FrdPlants" EntityType="LIVEModel.FrdPlant" />
+    <EntitySet Name="FrdReceiveDetails" EntityType="LIVEModel.FrdReceiveDetail" />
+    <EntitySet Name="FrdReceiveMasters" EntityType="LIVEModel.FrdReceiveMaster" />
   </EntityContainer>
   <ComplexType Name="spUserLoginToApplication_Result">
     <Property Type="Int32" Name="Id" Nullable="false" />
@@ -201,6 +202,7 @@
     <Property Name="PlantName" Type="Int32" Nullable="false" />
     <Property Name="MachineType" Type="Int32" />
     <Property Name="Flag" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="PID" Type="Int32" />
   </EntityType>
   <EntityType Name="FrdParameter">
     <Key>
@@ -348,19 +350,6 @@
     <Property Name="MeasurmentValue" Type="Decimal" Precision="18" Scale="4" />
     <Property Name="ConvertValue" Type="Int32" />
   </EntityType>
-  <EntityType Name="FrdReceiveDetail">
-    <Key>
-      <PropertyRef Name="PlantID" />
-      <PropertyRef Name="ReqRecID" />
-      <PropertyRef Name="ItemID" />
-    </Key>
-    <Property Name="PlantID" Type="Int32" Nullable="false" />
-    <Property Name="ReqRecID" Type="Int32" Nullable="false" />
-    <Property Name="ItemID" Type="Int32" Nullable="false" />
-    <Property Name="Quantity" Type="Int32" />
-    <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="4" />
-    <Property Name="TotalAmt" Type="Decimal" Precision="18" Scale="2" />
-  </EntityType>
   <EntityType Name="sPageName">
     <Key>
       <PropertyRef Name="SLNo" />
@@ -482,32 +471,6 @@
     <Property Name="TotalPrice" Type="Decimal" Precision="18" Scale="2" />
     <Property Name="Remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
     <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="CreateDate" Type="DateTime" Precision="3" />
-  </EntityType>
-  <EntityType Name="FrdReceiveMaster">
-    <Key>
-      <PropertyRef Name="PlantID" />
-      <PropertyRef Name="ReqRecID" />
-    </Key>
-    <Property Name="PlantID" Type="Int32" Nullable="false" />
-    <Property Name="ReqRecID" Type="Int32" Nullable="false" />
-    <Property Name="SupplierID" Type="Int32" />
-    <Property Name="ReqID" Type="Int32" />
-    <Property Name="DeptID" Type="Int32" />
-    <Property Name="CustID" Type="Int32" />
-    <Property Name="RecDate" Type="DateTime" Precision="0" />
-    <Property Name="TypeCode" Type="Int32" />
-    <Property Name="UserNote" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-    <Property Name="AppBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="AppDate" Type="DateTime" Precision="0" />
-    <Property Name="AppFlag" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-    <Property Name="AppRemarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-    <Property Name="AppBy2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="AppDate2" Type="DateTime" Precision="0" />
-    <Property Name="AppFlag2" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-    <Property Name="AppRemarks2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-    <Property Name="Status" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
     <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="CreateDate" Type="DateTime" Precision="3" />
   </EntityType>
@@ -709,5 +672,66 @@
     <Property Name="TrackID" Type="Int32" />
     <Property Name="ETrack" Type="Int32" />
     <Property Name="Location" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="FrdPlant">
+    <Key>
+      <PropertyRef Name="PlantID" />
+      <PropertyRef Name="PID" />
+      <PropertyRef Name="PCode" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PlantID" Type="Int32" Nullable="false" />
+    <Property Name="PID" Type="Int32" Nullable="false" />
+    <Property Name="PCode" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="PDesc" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="Active" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="FrdReceiveDetail">
+    <Key>
+      <PropertyRef Name="PlantID" />
+      <PropertyRef Name="ReqRecID" />
+      <PropertyRef Name="ItemID" />
+    </Key>
+    <Property Name="PlantID" Type="Int32" Nullable="false" />
+    <Property Name="ReqRecID" Type="Int32" Nullable="false" />
+    <Property Name="ItemID" Type="Int32" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="TotalAmt" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Curr" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CurrVal" Type="Decimal" Precision="18" Scale="8" />
+  </EntityType>
+  <EntityType Name="FrdReceiveMaster">
+    <Key>
+      <PropertyRef Name="PlantID" />
+      <PropertyRef Name="ReqRecID" />
+    </Key>
+    <Property Name="PlantID" Type="Int32" Nullable="false" />
+    <Property Name="ReqRecID" Type="Int32" Nullable="false" />
+    <Property Name="SupplierID" Type="Int32" />
+    <Property Name="ReqID" Type="Int32" />
+    <Property Name="DeptID" Type="Int32" />
+    <Property Name="CustID" Type="Int32" />
+    <Property Name="RecDate" Type="DateTime" Precision="0" />
+    <Property Name="TypeCode" Type="Int32" />
+    <Property Name="UserNote" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="AppBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AppDate" Type="DateTime" Precision="0" />
+    <Property Name="AppFlag" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="AppRemarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="AppBy2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AppDate2" Type="DateTime" Precision="0" />
+    <Property Name="AppFlag2" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="AppRemarks2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="Status" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CreateDate" Type="DateTime" Precision="3" />
+    <Property Name="VATPer" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="TAXPer" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="DiscountPer" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="DiscountAmt" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="CashCheque" Type="Int32" />
+    <Property Name="PaymentType" Type="Int32" />
+    <Property Name="MultipleSup" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
   </EntityType>
 </Schema>

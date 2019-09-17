@@ -20,5 +20,6 @@ namespace OnlineApp.Models
         public int PlantName { get; set; }
         public Nullable<int> MachineType { get; set; }
         public string Flag { get; set; }
+        public Nullable<int> PID { get; set; }
     }
 }

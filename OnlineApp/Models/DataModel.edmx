@@ -145,6 +145,7 @@
           <Property Name="PlantName" Type="int" Nullable="false" />
           <Property Name="MachineType" Type="int" />
           <Property Name="Flag" Type="varchar" MaxLength="1" />
+          <Property Name="PID" Type="int" />
         </EntityType>
         <EntityType Name="FrdParameter">
           <Key>
@@ -162,6 +163,19 @@
           <Property Name="Status" Type="varchar" MaxLength="1" />
           <Property Name="CreateBy" Type="varchar" MaxLength="30" />
           <Property Name="CreateDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="FrdPlant">
+          <Key>
+            <PropertyRef Name="PlantID" />
+            <PropertyRef Name="PID" />
+            <PropertyRef Name="PCode" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PlantID" Type="int" Nullable="false" />
+          <Property Name="PID" Type="int" Nullable="false" />
+          <Property Name="PCode" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="PDesc" Type="varchar" MaxLength="500" />
+          <Property Name="Active" Type="varchar" MaxLength="3" />
         </EntityType>
         <EntityType Name="FrdPurchase">
           <Key>
@@ -210,6 +224,8 @@
           <Property Name="Quantity" Type="int" />
           <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="4" />
           <Property Name="TotalAmt" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Curr" Type="varchar" MaxLength="50" />
+          <Property Name="CurrVal" Type="decimal" Precision="18" Scale="8" />
         </EntityType>
         <EntityType Name="FrdReceiveMaster">
           <Key>
@@ -236,6 +252,13 @@
           <Property Name="Status" Type="varchar" MaxLength="3" />
           <Property Name="CreateBy" Type="varchar" MaxLength="50" />
           <Property Name="CreateDate" Type="datetime" />
+          <Property Name="VATPer" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TAXPer" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="DiscountPer" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="DiscountAmt" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CashCheque" Type="int" />
+          <Property Name="PaymentType" Type="int" />
+          <Property Name="MultipleSup" Type="varchar" MaxLength="1" />
         </EntityType>
         <EntityType Name="FrdRequestDetail">
           <Key>
@@ -549,6 +572,7 @@
           <EntitySet Name="FrdItemTranInfo" EntityType="Self.FrdItemTranInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FrdMachine" EntityType="Self.FrdMachine" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FrdParameter" EntityType="Self.FrdParameter" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FrdPlant" EntityType="Self.FrdPlant" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FrdPurchase" EntityType="Self.FrdPurchase" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FrdPurchaseInfo" EntityType="Self.FrdPurchaseInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FrdReceiveDetail" EntityType="Self.FrdReceiveDetail" Schema="dbo" store:Type="Tables" />
@@ -634,7 +658,6 @@
           <EntitySet Name="sBenificiaries" EntityType="LIVEModel.sBenificiary" />
           <EntitySet Name="sDesignations" EntityType="LIVEModel.sDesignation" />
           <EntitySet Name="sUnits" EntityType="LIVEModel.sUnit" />
-          <EntitySet Name="FrdReceiveDetails" EntityType="LIVEModel.FrdReceiveDetail" />
           <EntitySet Name="sPageNames" EntityType="LIVEModel.sPageName" />
           <AssociationSet Name="fk_Menu" Association="LIVEModel.fk_Menu">
             <End Role="sMenu" EntitySet="sMenus" />
@@ -653,7 +676,6 @@
           </FunctionImport>
           <EntitySet Name="FrdPurchaseInfoes" EntityType="LIVEModel.FrdPurchaseInfo" />
           <EntitySet Name="FrdPurchases" EntityType="LIVEModel.FrdPurchase" />
-          <EntitySet Name="FrdReceiveMasters" EntityType="LIVEModel.FrdReceiveMaster" />
           <EntitySet Name="FrdStockMasters" EntityType="LIVEModel.FrdStockMaster" />
           <FunctionImport Name="spStockProduct">
             <Parameter Name="inPlant" Mode="In" Type="Int32" />
@@ -688,6 +710,9 @@
           <EntitySet Name="FrdItemTranInfoes" EntityType="LIVEModel.FrdItemTranInfo" />
           <EntitySet Name="sParams" EntityType="LIVEModel.sParam" />
           <EntitySet Name="FrdItemInfoes" EntityType="LIVEModel.FrdItemInfo" />
+          <EntitySet Name="FrdPlants" EntityType="LIVEModel.FrdPlant" />
+          <EntitySet Name="FrdReceiveDetails" EntityType="LIVEModel.FrdReceiveDetail" />
+          <EntitySet Name="FrdReceiveMasters" EntityType="LIVEModel.FrdReceiveMaster" />
         </EntityContainer>
         <ComplexType Name="spUserLoginToApplication_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -787,6 +812,7 @@
           <Property Name="PlantName" Type="Int32" Nullable="false" />
           <Property Name="MachineType" Type="Int32" />
           <Property Name="Flag" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="PID" Type="Int32" />
         </EntityType>
         <EntityType Name="FrdParameter">
           <Key>
@@ -934,19 +960,6 @@
           <Property Name="MeasurmentValue" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="ConvertValue" Type="Int32" />
         </EntityType>
-        <EntityType Name="FrdReceiveDetail">
-          <Key>
-            <PropertyRef Name="PlantID" />
-            <PropertyRef Name="ReqRecID" />
-            <PropertyRef Name="ItemID" />
-          </Key>
-          <Property Name="PlantID" Type="Int32" Nullable="false" />
-          <Property Name="ReqRecID" Type="Int32" Nullable="false" />
-          <Property Name="ItemID" Type="Int32" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" />
-          <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="4" />
-          <Property Name="TotalAmt" Type="Decimal" Precision="18" Scale="2" />
-        </EntityType>
         <EntityType Name="sPageName">
           <Key>
             <PropertyRef Name="SLNo" />
@@ -1068,32 +1081,6 @@
           <Property Name="TotalPrice" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="FrdReceiveMaster">
-          <Key>
-            <PropertyRef Name="PlantID" />
-            <PropertyRef Name="ReqRecID" />
-          </Key>
-          <Property Name="PlantID" Type="Int32" Nullable="false" />
-          <Property Name="ReqRecID" Type="Int32" Nullable="false" />
-          <Property Name="SupplierID" Type="Int32" />
-          <Property Name="ReqID" Type="Int32" />
-          <Property Name="DeptID" Type="Int32" />
-          <Property Name="CustID" Type="Int32" />
-          <Property Name="RecDate" Type="DateTime" Precision="0" />
-          <Property Name="TypeCode" Type="Int32" />
-          <Property Name="UserNote" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="AppBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="AppDate" Type="DateTime" Precision="0" />
-          <Property Name="AppFlag" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="AppRemarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="AppBy2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="AppDate2" Type="DateTime" Precision="0" />
-          <Property Name="AppFlag2" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="AppRemarks2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="Status" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
           <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
         </EntityType>
@@ -1298,6 +1285,67 @@
           <Property Name="ETrack" Type="Int32" />
           <Property Name="Location" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="FrdPlant">
+          <Key>
+            <PropertyRef Name="PlantID" />
+            <PropertyRef Name="PID" />
+            <PropertyRef Name="PCode" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PlantID" Type="Int32" Nullable="false" />
+          <Property Name="PID" Type="Int32" Nullable="false" />
+          <Property Name="PCode" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="PDesc" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="FrdReceiveDetail">
+          <Key>
+            <PropertyRef Name="PlantID" />
+            <PropertyRef Name="ReqRecID" />
+            <PropertyRef Name="ItemID" />
+          </Key>
+          <Property Name="PlantID" Type="Int32" Nullable="false" />
+          <Property Name="ReqRecID" Type="Int32" Nullable="false" />
+          <Property Name="ItemID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="TotalAmt" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Curr" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CurrVal" Type="Decimal" Precision="18" Scale="8" />
+        </EntityType>
+        <EntityType Name="FrdReceiveMaster">
+          <Key>
+            <PropertyRef Name="PlantID" />
+            <PropertyRef Name="ReqRecID" />
+          </Key>
+          <Property Name="PlantID" Type="Int32" Nullable="false" />
+          <Property Name="ReqRecID" Type="Int32" Nullable="false" />
+          <Property Name="SupplierID" Type="Int32" />
+          <Property Name="ReqID" Type="Int32" />
+          <Property Name="DeptID" Type="Int32" />
+          <Property Name="CustID" Type="Int32" />
+          <Property Name="RecDate" Type="DateTime" Precision="0" />
+          <Property Name="TypeCode" Type="Int32" />
+          <Property Name="UserNote" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="AppBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AppDate" Type="DateTime" Precision="0" />
+          <Property Name="AppFlag" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="AppRemarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="AppBy2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AppDate2" Type="DateTime" Precision="0" />
+          <Property Name="AppFlag2" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="AppRemarks2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="VATPer" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TAXPer" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="DiscountPer" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="DiscountAmt" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CashCheque" Type="Int32" />
+          <Property Name="PaymentType" Type="Int32" />
+          <Property Name="MultipleSup" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+        </EntityType>
 
       </Schema>
     </edmx:ConceptualModels>
@@ -1392,6 +1440,7 @@
           <EntitySetMapping Name="FrdMachines">
             <EntityTypeMapping TypeName="LIVEModel.FrdMachine">
               <MappingFragment StoreEntitySet="FrdMachine">
+                <ScalarProperty Name="PID" ColumnName="PID" />
                 <ScalarProperty Name="Flag" ColumnName="Flag" />
                 <ScalarProperty Name="MachineType" ColumnName="MachineType" />
                 <ScalarProperty Name="PlantName" ColumnName="PlantName" />
@@ -1548,18 +1597,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="FrdReceiveDetails">
-            <EntityTypeMapping TypeName="LIVEModel.FrdReceiveDetail">
-              <MappingFragment StoreEntitySet="FrdReceiveDetail">
-                <ScalarProperty Name="TotalAmt" ColumnName="TotalAmt" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
-                <ScalarProperty Name="ReqRecID" ColumnName="ReqRecID" />
-                <ScalarProperty Name="PlantID" ColumnName="PlantID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="sPageNames">
             <EntityTypeMapping TypeName="LIVEModel.sPageName">
               <MappingFragment StoreEntitySet="sPageName">
@@ -1674,32 +1711,6 @@
                 <ScalarProperty Name="TranDate" ColumnName="TranDate" />
                 <ScalarProperty Name="LocalForeign" ColumnName="LocalForeign" />
                 <ScalarProperty Name="ReceivedTranNo" ColumnName="ReceivedTranNo" />
-                <ScalarProperty Name="PlantID" ColumnName="PlantID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="FrdReceiveMasters">
-            <EntityTypeMapping TypeName="LIVEModel.FrdReceiveMaster">
-              <MappingFragment StoreEntitySet="FrdReceiveMaster">
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="AppRemarks2" ColumnName="AppRemarks2" />
-                <ScalarProperty Name="AppFlag2" ColumnName="AppFlag2" />
-                <ScalarProperty Name="AppDate2" ColumnName="AppDate2" />
-                <ScalarProperty Name="AppBy2" ColumnName="AppBy2" />
-                <ScalarProperty Name="AppRemarks" ColumnName="AppRemarks" />
-                <ScalarProperty Name="AppFlag" ColumnName="AppFlag" />
-                <ScalarProperty Name="AppDate" ColumnName="AppDate" />
-                <ScalarProperty Name="AppBy" ColumnName="AppBy" />
-                <ScalarProperty Name="UserNote" ColumnName="UserNote" />
-                <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
-                <ScalarProperty Name="RecDate" ColumnName="RecDate" />
-                <ScalarProperty Name="CustID" ColumnName="CustID" />
-                <ScalarProperty Name="DeptID" ColumnName="DeptID" />
-                <ScalarProperty Name="ReqID" ColumnName="ReqID" />
-                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
-                <ScalarProperty Name="ReqRecID" ColumnName="ReqRecID" />
                 <ScalarProperty Name="PlantID" ColumnName="PlantID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1921,6 +1932,65 @@
                 <ScalarProperty Name="ItemType" ColumnName="ItemType" />
                 <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
                 <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="PlantID" ColumnName="PlantID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FrdPlants">
+            <EntityTypeMapping TypeName="LIVEModel.FrdPlant">
+              <MappingFragment StoreEntitySet="FrdPlant">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="PDesc" ColumnName="PDesc" />
+                <ScalarProperty Name="PCode" ColumnName="PCode" />
+                <ScalarProperty Name="PID" ColumnName="PID" />
+                <ScalarProperty Name="PlantID" ColumnName="PlantID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FrdReceiveDetails">
+            <EntityTypeMapping TypeName="LIVEModel.FrdReceiveDetail">
+              <MappingFragment StoreEntitySet="FrdReceiveDetail">
+                <ScalarProperty Name="CurrVal" ColumnName="CurrVal" />
+                <ScalarProperty Name="Curr" ColumnName="Curr" />
+                <ScalarProperty Name="TotalAmt" ColumnName="TotalAmt" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="ReqRecID" ColumnName="ReqRecID" />
+                <ScalarProperty Name="PlantID" ColumnName="PlantID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FrdReceiveMasters">
+            <EntityTypeMapping TypeName="LIVEModel.FrdReceiveMaster">
+              <MappingFragment StoreEntitySet="FrdReceiveMaster">
+                <ScalarProperty Name="MultipleSup" ColumnName="MultipleSup" />
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+                <ScalarProperty Name="CashCheque" ColumnName="CashCheque" />
+                <ScalarProperty Name="DiscountAmt" ColumnName="DiscountAmt" />
+                <ScalarProperty Name="DiscountPer" ColumnName="DiscountPer" />
+                <ScalarProperty Name="TAXPer" ColumnName="TAXPer" />
+                <ScalarProperty Name="VATPer" ColumnName="VATPer" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="AppRemarks2" ColumnName="AppRemarks2" />
+                <ScalarProperty Name="AppFlag2" ColumnName="AppFlag2" />
+                <ScalarProperty Name="AppDate2" ColumnName="AppDate2" />
+                <ScalarProperty Name="AppBy2" ColumnName="AppBy2" />
+                <ScalarProperty Name="AppRemarks" ColumnName="AppRemarks" />
+                <ScalarProperty Name="AppFlag" ColumnName="AppFlag" />
+                <ScalarProperty Name="AppDate" ColumnName="AppDate" />
+                <ScalarProperty Name="AppBy" ColumnName="AppBy" />
+                <ScalarProperty Name="UserNote" ColumnName="UserNote" />
+                <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
+                <ScalarProperty Name="RecDate" ColumnName="RecDate" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="DeptID" ColumnName="DeptID" />
+                <ScalarProperty Name="ReqID" ColumnName="ReqID" />
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+                <ScalarProperty Name="ReqRecID" ColumnName="ReqRecID" />
                 <ScalarProperty Name="PlantID" ColumnName="PlantID" />
               </MappingFragment>
             </EntityTypeMapping>

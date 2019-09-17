@@ -42,13 +42,11 @@ namespace OnlineApp.Models
         public virtual DbSet<sBenificiary> sBenificiaries { get; set; }
         public virtual DbSet<sDesignation> sDesignations { get; set; }
         public virtual DbSet<sUnit> sUnits { get; set; }
-        public virtual DbSet<FrdReceiveDetail> FrdReceiveDetails { get; set; }
         public virtual DbSet<sPageName> sPageNames { get; set; }
         public virtual DbSet<sDept> sDepts { get; set; }
         public virtual DbSet<FrdApproval> FrdApprovals { get; set; }
         public virtual DbSet<FrdPurchaseInfo> FrdPurchaseInfoes { get; set; }
         public virtual DbSet<FrdPurchase> FrdPurchases { get; set; }
-        public virtual DbSet<FrdReceiveMaster> FrdReceiveMasters { get; set; }
         public virtual DbSet<FrdStockMaster> FrdStockMasters { get; set; }
         public virtual DbSet<FrdItemIssue> FrdItemIssues { get; set; }
         public virtual DbSet<FrdIssueDetail> FrdIssueDetails { get; set; }
@@ -56,6 +54,9 @@ namespace OnlineApp.Models
         public virtual DbSet<FrdItemTranInfo> FrdItemTranInfoes { get; set; }
         public virtual DbSet<sParam> sParams { get; set; }
         public virtual DbSet<FrdItemInfo> FrdItemInfoes { get; set; }
+        public virtual DbSet<FrdPlant> FrdPlants { get; set; }
+        public virtual DbSet<FrdReceiveDetail> FrdReceiveDetails { get; set; }
+        public virtual DbSet<FrdReceiveMaster> FrdReceiveMasters { get; set; }
     
         public virtual ObjectResult<spUserLoginToApplication_Result> spUserLoginToApplication(Nullable<int> userID, string userPass, string userPin)
         {

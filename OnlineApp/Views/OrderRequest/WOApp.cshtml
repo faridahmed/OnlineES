@@ -68,6 +68,9 @@
 
 <script>
     document.getElementById("create").disabled = true;
+    document.getElementById("btnCancel").disabled = true;
+    document.getElementById("UserNote").disabled = true;
+    document.getElementById("SupplierName").disabled = true;
     $('#ReqRecID').change(function () {
         $.ajax({
             url: "@Url.Action("PurchaseDataW", "OrderRequest")",
@@ -141,12 +144,12 @@
                 //check is successfully save to database
                 if (a.status == true) {
                     //will send status from server side
-                    alert('Successfully Done... Requisition Received Token No:' + a.v);
+                    alert('Successfully Done... Approval Ref No:' + a.v);
                     window.location.reload();
 
                 }
                 else {
-                    alert('Requisition Received Process is Failed!! Please Contact to IT dept.. ');
+                    alert('Approval Process is Failed!! Please Contact to IT dept.. ');
                 }
 
             },

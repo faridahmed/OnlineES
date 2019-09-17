@@ -4,12 +4,13 @@
     ViewBag.Title = "OrderRequest";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>Requisition Form</h2>
+<link href="~/Content/select2.min.css" rel="stylesheet" />
+<h2>Requisition</h2>
 @*<div>
         <input type="hidden" id="totalPcinCase" />
     </div>*@
 <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="width:750px;">
         <!-- Modal content-->
         <div class="modal-content row">
             <div class="modal-header">
@@ -21,19 +22,20 @@
                     <table style="border:none">
                         <tr style="border:none">
                             <td style="color:red">
-                                Item Code:
+                                Search Item:
                             </td>
                             <td>
-                                <select id="tItemCode" class="form-control" ,style="width:50px"><option>Select One</option></select>
+                                <select class="ItemM" style="width:500px" id="tItemCode"></select>
+                                @*<select id="tItemCode" class="form-control" ,style="width:40px"><option>Select One</option></select>*@
                                 @Html.TextBox("ItemCode", "", new { @Class = "form-control", @readonly = "readonly"})
                             </td>
-                            <td style="color:red">
+                            @*<td style="color:red">
                                 Part Code:
                             </td>
                             <td>
-                                <select id="tItemCode" class="form-control" ,style="width:50px"><option>Select One</option></select>
+                                <select id="tItemPart" class="form-control" ,style="width:40px"><option>Select One</option></select>
                                 @Html.TextBox("PartCode", "", new { @Class = "form-control", @readonly = "readonly" })
-                            </td>
+                            </td>*@
                         </tr>
                         <tr style="border:none">
                             <td>
@@ -42,25 +44,13 @@
                             <td>
                                 @Html.TextBox("ItemName", "", new { @Class = "form-control", @readonly = "readonly"})
                             </td>
-                        </tr>
-                        @*<tr style="border:none">
-                            <td>
-                                Unit:
+                            @*<td>
+                                Item Name:
                             </td>
                             <td>
-                                @Html.TextBox("Unit", "0", new { @Class = "form-control" })
-                            </td>
-                        </tr>*@
-                        @*<tr style="border:none">
-                            <td style="color:red">
-                                Unit Price:
-                            </td>
-                            <td>
-                                @Html.TextBox("UnitPrice", "0.0000", new { @Class = "form-control" })
-                            </td>
-
-                        </tr>*@
-                        <tr style="border:none">
+                                @Html.TextBox("yItemName", "", new { @Class = "form-control", @readonly = "readonly" })
+                            </td>*@
+                          <tr style="border:none">
                             <td style="color:red">
                                 Order Qty:
                             </td>
@@ -113,12 +103,8 @@
             </div>
         </div>
 
-        <div class="col-md-4">
-            @*<label>Total Qty.</label>
-            <input type="text" class="form-control" id="ReturnGoodsQty" value="0" readonly style="text-align:center" />
-            <label>Amount</label>
-            <input type="text" class="form-control" id="InAmount" value="0.00" readonly style="text-align:right" />*@            
-            <label>Any Refernece No :</label>
+        <div class="col-md-4">            
+            <label>Refernece No (if any):</label>
             @Html.TextBox("RefNo", null, new { placeholder = "Ref No Field Optional", @class = "form-control" })
             <label>Remarks/Note:</label>
             @Html.TextBox("Reasons", null, new { placeholder = "Remarks Field Optional",@class = "form-control", @style = "text-align:left;color:blue;font:bold" })            
@@ -153,10 +139,11 @@
             </div>
         </div>
     </div>
+<script src="~/Scripts/select2.min.js"></script>
     <script>
         document.getElementById("AddBtn").disabled = true;
         document.getElementById("create").disabled = true;
-        function getItemNo(id) {
+         @*function getItemNo(id) {
             $.ajax({
                 url: "@Url.Action("getItemDescNo", "OrderRequest")",
                 data: { inCustomer: $("#WarehouseID").val() },
@@ -172,8 +159,53 @@
                 }
             });
 
-        }
+        }*@
+        $(document).ready(function () {
+            $(".ItemM").select2({
+                placeholder: "Items",
+                theme: "classic",
+                ajax: {
+                    url: "/OrderRequest/GetItemList",
+                    dataType: "json",
+                    data: function (params) {
+                        return {
+                            searchTerm: params.term
+                        };
+                    },
+                    processResults: function (data, params) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+        });
+        @*function getItemPart(id) {
+            $.ajax({
+                url: "@Url.Action("getItemPartCode", "OrderRequest")",
+                data: { inCustomer: $("#WarehouseID").val() },
+            type: "GET",
+            dataType: "json",
+            success: function (j) {
+                $("#tItemPart").html('0');
+                var options = '0-0';
+                for (var i = 0; i < j.length; i++) {
+                    options += '<option value="' + j[i].id + '">' + j[i].name + '</option>';
+                }
+                $("#tItemPart").html(options);
+            }
+        });
 
+        }*@
+
+        $("#tItemPart").change(function () {
+            var c = $("#tItemPart").val();
+            $("#ItemPart").val(c);
+            // $('#ItemCode').focus();
+            itemdesc();
+            document.getElementById("AddBtn").disabled = false;
+            $('#OrderQty').focus()
+        });
         $("#tItemCode").change(function () {
             var c = $("#tItemCode").val();
             $("#ItemCode").val(c);
@@ -190,8 +222,8 @@
 
             if (num1 <0) {
               alert(num1 + " Sorry!!! The Negetive value You Can't Entry.");
-                
-            } 
+
+            }
             //else {
         //        alert(num1 + " is not a number");
         //        $("#OrderQty").val('0');
@@ -201,6 +233,8 @@
         $("#DeptID").blur(function () {
             var id = $('#WarehouseID').val();
             getItemNo(id);
+            getItemPart(id);
+
         });
 
         function ItemInfo() {
@@ -216,7 +250,7 @@
             //var c4 = n.insertCell(3);
             //var c5 = n.insertCell(4);
             //var c6 = n.insertCell(5);
-            
+
             c1.innerHTML = d.value;
             c2.innerHTML = s.value;
             c3.innerHTML = x.value;
@@ -225,6 +259,8 @@
             //c6.innerHTML = z.value;
             document.getElementById("AddBtn").disabled = true;
             document.getElementById("create").disabled = false;
+            $('#OrderQty').val("0");
+
         }
 
         function itemdesc() {
@@ -264,7 +300,7 @@
                     OrderData.push({
                         ItemID: $(tr).find('td:eq(0)').text(),
                         Quantity: $(tr).find('td:eq(2)').text(),
-                       // BoxQty: $(tr).find('td:eq(3)').text(),                
+                       // BoxQty: $(tr).find('td:eq(3)').text(),
                     });
                 }
             });
@@ -312,4 +348,5 @@
         }
 
     </script>
+<script src="~/Scripts/select2.min.js"></script>
 
