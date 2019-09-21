@@ -59,6 +59,7 @@
     <Property Name="Show" Type="varchar" MaxLength="3" Nullable="false" />
     <Property Name="CreateBy" Type="varchar" MaxLength="30" />
     <Property Name="CreateDate" Type="datetime" />
+    <Property Name="PartCode" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="FrdItemInfo">
     <Key>
@@ -553,6 +554,10 @@
     <Parameter Name="UserID" Type="int" Mode="In" />
     <Parameter Name="UserPass" Type="varchar" Mode="In" />
     <Parameter Name="UserPin" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="StatusWorkOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="wId" Type="int" Mode="In" />
+    <Parameter Name="startDate" Type="date" Mode="In" />
   </Function>
   <Function Name="Work_order" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="reqId" Type="int" Mode="In" />

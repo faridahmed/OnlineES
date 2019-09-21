@@ -3,7 +3,7 @@
 <input type="radio" name="nm" id="r1" value="1" class="radio radio-inline"> Recuisition</>
 <input type="radio" name="nm" id="r2" value="2" class="radio radio-inline"> Issue & Receieve </>
 <input type="radio" name="nm" id="r3" value="3" class="radio radio-inline">Quality Assurance Check</>
-
+<input type="radio" name="nm" id="r4" value="4" class="radio radio-inline">Status of Work Order</>
 
 
 <div class="panel-body">
@@ -66,7 +66,14 @@
             $("#ReqRecID").prop('disabled', false);
 
         });
+        $("#r4").change(function () {
+            $("#BeginingDate").prop('disabled', false);
+            $("#EndingDate").prop('disabled', true);
+            $("#ReqID").prop('disabled', true);
+            $("#PlantNo").prop('disabled', false);
+            $("#ReqRecID").prop('disabled', true);
 
+        });
 
 
         $('#showReport').click(function () {
@@ -106,6 +113,19 @@
                     dataType: "HTML",
                 type: "POST",
                 data: { planid: wValue, reqrecid: reValue},
+                cache: false,
+                async: true,
+                success: function (data) {
+                    $("#tabledata").html(data);
+                }
+            });
+            }
+            else if (radioValue == 4) {
+                $.ajax({
+                    url: "@Url.Action("WOStatus", "RequisitionSlip")",
+                    dataType: "HTML",
+                type: "POST",
+                data: { planid: wValue, d1: $("#BeginingDate").val()},
                 cache: false,
                 async: true,
                 success: function (data) {

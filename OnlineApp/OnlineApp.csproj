@@ -378,6 +378,9 @@
     <Compile Include="Models\sRole.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\StatusWorkOrder_Result.cs">
+      <DependentUpon>DataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sUnit.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
@@ -403,6 +406,11 @@
     </Compile>
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="statusworkorder.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>statusworkorder.xsd</DependentUpon>
+    </Compile>
     <Compile Include="workorderdataset.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -636,6 +644,17 @@
     <Content Include="Views\StoreTransaction\ItemTran.cshtml" />
     <Content Include="Views\RequisitionSlip\Index.cshtml" />
     <Content Include="Views\RequisitionSlip\RequisitionslipCount.cshtml" />
+    <Content Include="statusworkorder.xsc">
+      <DependentUpon>statusworkorder.xsd</DependentUpon>
+    </Content>
+    <None Include="statusworkorder.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>statusworkorder.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="statusworkorder.xss">
+      <DependentUpon>statusworkorder.xsd</DependentUpon>
+    </Content>
     <None Include="workorderdataset.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -666,6 +685,7 @@
     <EmbeddedResource Include="Reports\MyReport.rdlc" />
     <EmbeddedResource Include="Reports\qualityAssurance.rdlc" />
     <EmbeddedResource Include="Reports\requisitionslip.rdlc" />
+    <EmbeddedResource Include="Reports\statusworkorder.rdlc" />
     <EmbeddedResource Include="Reports\workorder.rdlc" />
   </ItemGroup>
   <PropertyGroup>

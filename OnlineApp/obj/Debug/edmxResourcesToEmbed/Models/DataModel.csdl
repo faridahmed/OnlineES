@@ -103,6 +103,10 @@
     <EntitySet Name="FrdPlants" EntityType="LIVEModel.FrdPlant" />
     <EntitySet Name="FrdReceiveDetails" EntityType="LIVEModel.FrdReceiveDetail" />
     <EntitySet Name="FrdReceiveMasters" EntityType="LIVEModel.FrdReceiveMaster" />
+    <FunctionImport Name="StatusWorkOrder" ReturnType="Collection(LIVEModel.StatusWorkOrder_Result)">
+      <Parameter Name="wId" Mode="In" Type="Int32" />
+      <Parameter Name="startDate" Mode="In" Type="DateTime" />
+    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="spUserLoginToApplication_Result">
     <Property Type="Int32" Name="Id" Nullable="false" />
@@ -289,6 +293,7 @@
     <Property Name="Show" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
     <Property Name="CreateBy" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
     <Property Name="CreateDate" Type="DateTime" Precision="3" />
+    <Property Name="PartCode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="FrdRequestDetail">
     <Key>
@@ -734,4 +739,23 @@
     <Property Name="PaymentType" Type="Int32" />
     <Property Name="MultipleSup" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
   </EntityType>
+  <ComplexType Name="StatusWorkOrder_Result">
+    <Property Type="Int32" Name="ReqRecID" Nullable="false" />
+    <Property Type="String" Name="AppBy" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="PlantName" Nullable="false" MaxLength="500" />
+    <Property Type="String" Name="SupplierName" Nullable="true" MaxLength="150" />
+    <Property Type="Int32" Name="SupplierID" Nullable="true" />
+    <Property Type="Int32" Name="DeptID" Nullable="true" />
+    <Property Type="String" Name="DeptName" Nullable="true" MaxLength="500" />
+    <Property Type="DateTime" Name="RecDate" Nullable="true" />
+    <Property Type="String" Name="AppBy2" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Status" Nullable="true" MaxLength="3" />
+    <Property Type="String" Name="AppRemarks" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="AppRemarks2" Nullable="true" MaxLength="500" />
+    <Property Type="DateTime" Name="AppDate2" Nullable="true" />
+    <Property Type="DateTime" Name="AppDate" Nullable="true" />
+    <Property Type="DateTime" Name="CreateDate" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="ReqID" Nullable="false" />
+    <Property Type="String" Name="SupplierAddress" Nullable="true" MaxLength="500" />
+  </ComplexType>
 </Schema>

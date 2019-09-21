@@ -30,6 +30,10 @@ namespace OnlineApp.Controllers
             ViewBag.ItemTypeCode = new SelectList(db.sParams.Where(c => c.StartCode == 500001), "IDCode", "Description");
             ViewBag.ItemUnitCode = new SelectList(db.sUnits, "UnitID", "UnitName");
             ViewBag.ItemMachineCode = new SelectList(db.FrdMachines, "MachineID", "MachineName");
+            ViewBag.AlmariCode = new SelectList(db.sParams.Where(c => c.StartCode == 600001), "IDCode", "Description");
+            ViewBag.RowID = new SelectList(db.sParams.Where(c => c.StartCode == 900001), "IDCode", "Description");
+            ViewBag.RacID = new SelectList(db.sParams.Where(c => c.StartCode == 700001), "IDCode", "Description");
+            ViewBag.BinID = new SelectList(db.sParams.Where(c => c.StartCode == 800001), "IDCode", "Description");
             int value = db.FrdItems.Max(a => a.ItemNo);
             int num = value;
 
@@ -40,33 +44,61 @@ namespace OnlineApp.Controllers
             };
             return View(sup);
         }
-        [HttpPost]
-        public ActionResult CreateItem(ItemVM item)
-        {
-            using (LIVEEntities db = new LIVEEntities())
-            {
-                FrdItem nw = new FrdItem();
-                nw.ItemNo = item.ItemNo;
-                nw.ItemCode = item.ItemCode;
-                nw.ItemName = item.ItemName;
-                nw.ItemDescription = item.ItemDescription;
-                nw.ItemType = item.ItemType;
-                nw.ItemTypeCode = item.ItemTypeCode;
-                nw.ItemUnitCode = item.ItemUnitCode;
-                nw.PlantCode = item.PlantCode;
-                nw.ItemMachineCode = item.ItemMachineCode;
-                nw.UnitPrice = item.UnitPrice;
-                nw.TaxFlag = "Y";
-                nw.ConvertValue = item.ConvertValue;
-                nw.UseFor = "User recomended";
-                nw.Show = "N";
-                nw.CreateBy = Session["Name"].ToString();
-                nw.CreateDate = DateTime.Now;
-                db.FrdItems.Add(nw);
-                db.SaveChanges();
-                return RedirectToAction("Index");
 
+        [HttpPost]
+        public JsonResult CreateItem(ItemVM item, ItemVMInfo iteminf)
+        {
+
+            bool status = false;
+            string mes = "";
+            if (ModelState.IsValid)
+            {
+                using (LIVEEntities db = new LIVEEntities())
+                {
+                    FrdItem nw = new FrdItem();
+                    nw.ItemNo = item.ItemNo;
+                    nw.ItemCode = item.ItemCode;
+                    nw.ItemName = item.ItemName;
+                    nw.ItemDescription = item.ItemDescription;
+                    nw.ItemType = item.ItemType;
+                    nw.ItemTypeCode = item.ItemTypeCode;
+                    nw.ItemUnitCode = item.ItemUnitCode;
+                    nw.PlantCode = item.PlantCode;
+                    nw.ItemMachineCode = item.ItemMachineCode;
+                    nw.UnitPrice = item.UnitPrice;
+                    nw.TaxFlag = "Y";
+                    nw.ConvertValue = item.ConvertValue;
+                    nw.UseFor = "User recomended";
+                    nw.Show = "N";
+                    nw.CreateBy = Session["Name"].ToString();
+                    nw.CreateDate = DateTime.Now;
+                    db.FrdItems.Add(nw);
+                    db.SaveChanges();
+
+                    FrdItemInfo inf = new FrdItemInfo();
+                    inf.PlantID = item.PlantCode;
+                    inf.ItemID = item.ItemNo;
+                    inf.ItemCode = item.ItemTypeCode.ToString();
+                    inf.ItemType = item.ItemType;
+                    //inf.ItemUse = iteminf.ItemUse;
+                    inf.MachineID = item.ItemMachineCode;
+                    inf.AlmariCode = iteminf.AlmariCode;
+                    inf.AlmariDesc = "Emptynit";
+                    inf.ItemSize = "size";
+                    inf.RowID = iteminf.RowID;
+                    inf.RacID = iteminf.RacID;
+                    inf.BinID = iteminf.BinID;
+                    inf.Location = item.Location;
+                    db.FrdItemInfoes.Add(inf);
+                    db.SaveChanges();
+                    status = true;
+                }
             }
+            else
+            {
+                status = false;
+            }
+            return new JsonResult { Data = new { status = status, mes = mes } };
         }
 
         // GET: FrdItems/Details/5

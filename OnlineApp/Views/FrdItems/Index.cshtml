@@ -18,7 +18,6 @@
                             <td>
                                 @Html.TextBox("WarehouseIDLogin", null, htmlAttributes: new { @class = "form-control", @Value = ViewBag.WarehouseIDLogin, @readonly = "readonly" })
                             </td>
-                            <td>@Html.TextBox("PlantCode", null, htmlAttributes: new { @class = "form-control", @Value = ViewBag.PlantCode, @readonly = "readonly" })</td>
                         </tr>
                         <tr>
 
@@ -57,7 +56,13 @@
                             <td>@Html.EditorFor(model => model.ItemDescription, new { htmlAttributes = new { @class = "form-control" } })</td>
 
                         </tr>
-                       
+                        <tr>
+
+                            <td style="color:black">
+                                Plant
+                            </td>
+                            <td>@Html.TextBox("PlantCode", null, htmlAttributes: new { @class = "form-control", @Value = ViewBag.PlantCode, @readonly = "readonly" })</td>
+                        </tr>
                         <tr>
 
 
@@ -67,7 +72,16 @@
                             <td>@Html.DropDownList("ItemType", null, "Select Item Type", new { @class = "form-control" })</td>
 
                         </tr>
+                        <tr>
 
+
+                            <td style="color:black">
+                                Item TypeCode
+                            </td>
+
+                            <td>@Html.DropDownList("ItemTypeCode", null, "Select Item Type Code", new { @class = "form-control" })</td>
+
+                        </tr>
 
 
 
@@ -82,60 +96,227 @@
                         </div>
                     </div>
                     <table class="table table-bordered table-hover">
+
                         <tr>
 
 
                             <td style="color:black">
-                                Item TypeCode
+                                Item Almari
                             </td>
 
-                            <td>@Html.DropDownList("ItemTypeCode", null, "Select Item Type Code", new { @class = "form-control" })</td>
+                            <td>@Html.DropDownList("AlmariCode", null, "Select Almari", new { @class = "form-control", @onChange = "selectedtxt1(this)" })</td>
 
                         </tr>
                         <tr>
 
 
                             <td style="color:black">
-                                Item Unit Code
+                                Item Row
                             </td>
-                            <td>@Html.DropDownList("ItemUnitCode", null, "Select Unit", new { @class = "form-control" })</td>
 
-                        </tr>
-                        <tr>
-
-
-                            <td style="color:black">
-                                Item MachineCode
-                            </td>
-                            <td>@Html.DropDownList("ItemMachineCode", null, "Select Machine", new { @class = "form-control" })</td>
-
-                        </tr>
-                        <tr>
-
-
-                            <td style="color:black">
-                                Unit Price
-                            </td>
-                            <td>@Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control" } })</td>
-
-                        </tr>
-
-
-
-                        <tr>
-                            <td>&nbsp;</td>
                             <td>
-                                <input type="submit" value="Add Items" class="btn btn-info" />
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                                @Html.DropDownList("RowID", null, "Select Row", new { @class = "form-control", @onChange = "selectedtxt2(this)" })
+                        </td>
+
+                    </tr>
+                    <tr>
+
+
+                        <td style="color:black">
+                            Item Rac
+                        </td>
+
+                        <td>
+                            @Html.DropDownList("RacID", null, "Select Rac", new { @class = "form-control", @onChange = "selectedtxt3(this)" })
+                        </td>
+
+                    </tr>
+                    <tr>
+
+
+                        <td style="color:black">
+                            Item Bin
+                        </td>
+
+                        <td>
+                            @Html.DropDownList("BinID", null, "Select Bin", new { @class = "form-control", @onChange = "selectedtxt4(this)" })
+                        </td>
+
+                    </tr>
+                    <tr>
+
+
+                        <td>
+                            <input type="button" id="setVal" value="Location Join!">
+                        </td>
+
+                        <td>
+                            <input class="combine" id="txt1" disabled="disabled" readonly="readonly" hidden />
+                            <input class="combine" id="txt2" disabled="disabled" readonly="readonly" hidden />
+                            <input class="combine" id="txt3" disabled="disabled" readonly="readonly" hidden />
+                            <input class="combine" id="txt4" disabled="disabled" readonly="readonly" hidden />
+                            <input type="text" class="combine" name="Location" id="Location" size="45" readonly="readonly" />
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+
+                        <td style="color:black">
+                            Item Unit Code
+                        </td>
+                        <td>@Html.DropDownList("ItemUnitCode", null, "Select Unit", new { @class = "form-control" })</td>
+
+                    </tr>
+                    <tr>
+
+
+                        <td style="color:black">
+                            Item MachineCode
+                        </td>
+                        <td>@Html.DropDownList("ItemMachineCode", null, "Select Machine", new { @class = "form-control" })</td>
+
+                    </tr>
+                    <tr>
+
+
+                        <td style="color:black">
+                            Unit Price
+                        </td>
+                        <td>@Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control" } })</td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            <input type="button" id="btnClick" value="Save" class="btn btn-primary btn-sm btn-block" onclick="ItemCreated()" ; />
+                        </td>
+                        <td>
+                            <input type="button" id="btnReset" value="Reset" class="btn btn-primary btn-sm btn-block" onclick="ReLoad()" ; />
+
+                        </td>
+                    </tr>
+
+                </table>
             </div>
         </div>
     </div>
+</div>
 
 }
+@section Scripts {
+    <script type="text/javascript">
+    function ItemCreated() {
+        document.getElementById("btnClick").disabled = true;
+        var answer = confirm('Are you sure you want to save this?');
+        if (answer) {
+            //  return;
+            //return status;
+        }
+        else {
+            return false;
+        }
+        var isAllValid = true;
+        var status = true;
 
+        //debugger;
+
+        if (isAllValid) {
+            var data = {
+
+                ItemNo: $('#ItemNo').val(),
+                ItemCode: $('#ItemCode').val(),
+                ItemName: $('#ItemName').val(),
+                ItemDescription: $('#ItemDescription').val(),
+                ItemType: $('#ItemType').val(),
+                ItemTypeCode: $('#ItemTypeCode').val(),
+                ItemUnitCode: $('#ItemUnitCode').val(),
+                PlantCode: $('#PlantCode').val(),
+                ItemMachineCode: $('#ItemMachineCode').val(),
+                UnitPrice: $('#UnitPrice').val(),
+
+                AlmariCode: $('#AlmariCode').val(),
+                RowID: $('#RowID').val(),
+                RacID: $('#RacID').val(),
+                BinID: $('#BinID').val(),
+
+            }
+        }
+        console.log(data);
+
+
+        $.ajax({
+            url: '/FrdItems/CreateItem',
+            type: "POST",
+            data: JSON.stringify(data),
+            dataType: "JSON",
+            contentType: "application/json",
+            success: function (a) {
+
+                if (a.status == true) {
+
+                    alert('Successfully Done...');
+                    window.location.reload();
+                }
+                else {
+                    alert('Duplicate Location Found Try again!!');
+                }
+
+
+            },
+            error: function () {
+                alert('Error. Please try again.');
+            }
+        });
+    }
+
+
+    function ReLoad() {
+        alert("Are you sure reset the page ...?")
+        location.reload();
+    }
+    function selectedtxt1(ddlitem) {
+
+        var selvalue = ddlitem.value;
+        var seltext = ddlitem.options[ddlitem.selectedIndex].innerHTML;
+        $('#txt1').val(seltext);
+    }
+    function selectedtxt2(ddlitem) {
+
+        var selvalue = ddlitem.value;
+        var seltext = ddlitem.options[ddlitem.selectedIndex].innerHTML;
+        $('#txt2').val(seltext);
+    }
+    function selectedtxt3(ddlitem) {
+
+        var selvalue = ddlitem.value;
+        var seltext = ddlitem.options[ddlitem.selectedIndex].innerHTML;
+        $('#txt3').val(seltext);
+    }
+    function selectedtxt4(ddlitem) {
+
+        var selvalue = ddlitem.value;
+        var seltext = ddlitem.options[ddlitem.selectedIndex].innerHTML;
+        $('#txt4').val(seltext);
+    }
+    $(document).ready(function () {
+        $('#setVal').on('click', function () {
+            var form = $('.combine').not('#Location');
+            var vals = form.map(function () {
+                var value = $.trim(this.value)
+                return value ? value : undefined;
+            }).get();
+            $('#Location').val(vals.join('/'))
+        });
+    });
+
+    </script>
+}
 
 
 

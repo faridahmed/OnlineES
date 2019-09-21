@@ -194,5 +194,18 @@ namespace OnlineApp.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<requisitionSlip_Result>("requisitionSlip", reqIdParameter, plantIdParameter);
         }
+    
+        public virtual ObjectResult<StatusWorkOrder_Result> StatusWorkOrder(Nullable<int> wId, Nullable<System.DateTime> startDate)
+        {
+            var wIdParameter = wId.HasValue ?
+                new ObjectParameter("wId", wId) :
+                new ObjectParameter("wId", typeof(int));
+    
+            var startDateParameter = startDate.HasValue ?
+                new ObjectParameter("startDate", startDate) :
+                new ObjectParameter("startDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<StatusWorkOrder_Result>("StatusWorkOrder", wIdParameter, startDateParameter);
+        }
     }
 }

@@ -122,5 +122,35 @@ namespace OnlineApp.Controllers
             return PartialView("RequisitionslipCount");
 
         }
+        public ActionResult WOStatus(DateTime d1, Nullable<int> planid)
+        {
+
+            ReportViewer reportViewer = new ReportViewer
+            {
+                ProcessingMode = ProcessingMode.Local,
+                SizeToReportContent = true,
+                Width = Unit.Percentage(50),
+                Height = Unit.Percentage(50)
+            };
+
+
+            //var v = (from x in db.FrdRequestMasters where x.ReqID == reqid select x).FirstOrDefault();
+            List<StatusWorkOrder_Result> obj = db.StatusWorkOrder(planid, d1).ToList();
+            reportViewer.LocalReport.ReportPath = Request.MapPath(Request.ApplicationPath) + @"Reports/statusworkorder.rdlc";
+
+            //ReportParameter rp2 = new ReportParameter("wName", v.OrderId.ToString());
+
+            // reportViewer.LocalReport.SetParameters(new ReportParameter[] { rp2 });
+
+            ReportDataSource rdc = new ReportDataSource("statusworkorder", obj);
+            reportViewer.LocalReport.DataSources.Add(rdc);
+
+            reportViewer.LocalReport.Refresh();
+            reportViewer.Visible = true;
+
+            ViewBag.ReportViewer = reportViewer;
+            return PartialView("RequisitionslipCount");
+
+        }
     }
 }

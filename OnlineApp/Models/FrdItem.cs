@@ -31,5 +31,6 @@ namespace OnlineApp.Models
         public string Show { get; set; }
         public string CreateBy { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
+        public string PartCode { get; set; }
     }
 }

@@ -163,6 +163,7 @@
     <EntitySetMapping Name="FrdItems">
       <EntityTypeMapping TypeName="LIVEModel.FrdItem">
         <MappingFragment StoreEntitySet="FrdItem">
+          <ScalarProperty Name="PartCode" ColumnName="PartCode" />
           <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
           <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
           <ScalarProperty Name="Show" ColumnName="Show" />
@@ -641,5 +642,28 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="StatusWorkOrder" FunctionName="LIVEModel.Store.StatusWorkOrder">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="LIVEModel.StatusWorkOrder_Result">
+          <ScalarProperty Name="ReqRecID" ColumnName="ReqRecID" />
+          <ScalarProperty Name="AppBy" ColumnName="AppBy" />
+          <ScalarProperty Name="PlantName" ColumnName="PlantName" />
+          <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
+          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+          <ScalarProperty Name="DeptID" ColumnName="DeptID" />
+          <ScalarProperty Name="DeptName" ColumnName="DeptName" />
+          <ScalarProperty Name="RecDate" ColumnName="RecDate" />
+          <ScalarProperty Name="AppBy2" ColumnName="AppBy2" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="AppRemarks" ColumnName="AppRemarks" />
+          <ScalarProperty Name="AppRemarks2" ColumnName="AppRemarks2" />
+          <ScalarProperty Name="AppDate2" ColumnName="AppDate2" />
+          <ScalarProperty Name="AppDate" ColumnName="AppDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="ReqID" ColumnName="ReqID" />
+          <ScalarProperty Name="SupplierAddress" ColumnName="SupplierAddress" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>
